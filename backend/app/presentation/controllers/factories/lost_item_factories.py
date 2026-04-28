@@ -4,6 +4,14 @@ from backend.app.infrastructure.queries.lost_item_query_service import LostItemQ
 
 from backend.app.presentation.controllers.list_lost_items_summarized_controller import ListLostItemsSummarizedController
 
+from backend.app.application.use_cases.create_lost_item_use_case import CreateLostItemUseCase
+
+from backend.app.infrastructure.persistence.repositories.lost_item_repository import LostItemRepository
+from backend.app.infrastructure.persistence.repositories.category_repository import CategoryRepository
+from backend.app.infrastructure.persistence.repositories.building_space_repository import BuildingSpaceRepository
+from backend.app.infrastructure.persistence.repositories.user_account_repository import UserAccountRepository
+
+from backend.app.presentation.controllers.create_lost_item_controller import CreateLostItemController
 
 from sqlalchemy.orm import Session
 
@@ -30,6 +38,33 @@ def make_list_lost_item_summarized_controller(session: Session):
 
     return ListLostItemsSummarizedController(use_case)
 
-
-
     
+def make_create_lost_item_controller(session: Session) -> CreateLostItemController:
+
+    """Factory function que cria um objeto CreateLostItemController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    CreateLostItemController
+        Ponto de acesso do endpoint com o caso de uso de registro de item perdido
+        
+    """
+
+    lost_item_repository = LostItemRepository(session)
+    category_repository = CategoryRepository(session)
+    building_space_repository = BuildingSpaceRepository(session)
+    user_account_repository = UserAccountRepository(session)
+
+    create_lost_item_use_case = CreateLostItemUseCase(
+        lost_item_repository=lost_item_repository,
+        category_repository=category_repository,
+        building_space_repository=building_space_repository,
+        user_account_repository=user_account_repository,
+    )
+
+    return CreateLostItemController(create_lost_item_use_case)

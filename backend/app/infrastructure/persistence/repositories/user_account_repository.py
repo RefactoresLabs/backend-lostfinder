@@ -87,7 +87,23 @@ class UserAccountRepository(UserAccountRepositoryInterface):
         
         """
 
-        pass
+        user_account_model = (self.__session
+         .query(UserAccountModel)
+         .filter(UserAccountModel.id == id)
+         .first())
+
+        if user_account_model is None:
+
+            return None
+
+        return UserAccount(
+            id=user_account_model.id,
+            name=user_account_model.name,
+            email=user_account_model.email,
+            password=user_account_model.password,
+            phone=user_account_model.phone,
+        )
+
 
     def get_user_account_by_email(self, email: str) -> UserAccount | None:
 

@@ -46,9 +46,10 @@ class RegisterUserAccountUseCase:
 
         _ = self.__repository.create_new_user_account(
             UserAccount(
+                None,
                 dto.name,
                 dto.email,
                 hashed_password,
                 dto.phone,
             )
-        )  
+        )
