@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 
 
 import os
+import re
 
 
 from backend.app.presentation.schemas.http_request import HttpRequest
 from backend.app.presentation.controllers.factories.lost_item_factories import (
         make_list_lost_item_summarized_controller,
         make_create_lost_item_controller,
+        make_get_lost_item_details_controller,
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -69,7 +71,10 @@ def create_lost_item_routes(app: Flask) -> None:
 
         with SessionManager(database_url) as session_manager:
 
+            limit_match = re.compile("(?<=limit=)-?\d+").search(request.url)
+
             http_request = HttpRequest(
+                params={"limit": limit_match.group()} if limit_match else {},
                 body=request.get_json()
             )
 
@@ -80,3 +85,32 @@ def create_lost_item_routes(app: Flask) -> None:
             http_response = list_lost_item_summarized_controller.handle(http_request)
         
         return jsonify(http_response.body), http_response.status_code
+    
+    @app.route("/lost-items/{item_id}", methods=["GET"])
+    @jwt_required
+    def get_lost_item_details(item_id: int):
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ["DATABASE"],
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "item_id": item_id,
+                },
+            )
+
+            get_lost_item_details_controller = make_get_lost_item_details_controller(
+                session_manager.session,
+            )
+
+            http_response = get_lost_item_details_controller.handle(http_request)
+
+            return jsonify(http_response.body), http_response.status_code
+
+
