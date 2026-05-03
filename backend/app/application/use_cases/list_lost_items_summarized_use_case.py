@@ -1,5 +1,5 @@
 from backend.app.application.interfaces.lost_item_query_service_interface import LostItemQueryServiceInterface
-from backend.app.application.dtos.list_lost_items_summarized_dto import ListLostItemsSummarizedDTO
+from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
 
 class ListLostItemsSummarizedUseCase:
 
@@ -7,7 +7,7 @@ class ListLostItemsSummarizedUseCase:
 
     def __init__(self, lost_item_query_service: LostItemQueryServiceInterface) -> None:
 
-        """Inicializa os atributos de instância de ShowLostItemsUseCase
+        """Inicializa os atributos de instância de ListLostItemsSummarizedUseCase
 
         Parameters
         ----------
@@ -19,13 +19,13 @@ class ListLostItemsSummarizedUseCase:
 
         self.__query_service = lost_item_query_service
     
-    def execute(self) -> list[ListLostItemsSummarizedDTO]:
+    def execute(self) -> list[ListItemsSummarizedDTO]:
 
         """Executa o fluxo de eventos do caso de uso de listar itens perdidos resumidamente
 
         Returns
         -------
-        list[ListLostItemsSummarizedDTO]
+        list[ListItemsSummarizedDTO]
             Iterável contendo os DTOs com os dados resumidos dos itens perdidos
             
         """
@@ -33,7 +33,7 @@ class ListLostItemsSummarizedUseCase:
         summarized_lost_items = self.__query_service.get_all_lost_items_summarized()
 
         return [
-            ListLostItemsSummarizedDTO(
+            ListItemsSummarizedDTO(
                 lost_item["item_id"],
                 lost_item["item_name"],
                 lost_item["user_name"],
