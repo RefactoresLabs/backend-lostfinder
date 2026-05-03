@@ -48,7 +48,8 @@ class ListLostItemsSummarizedController:
             return HttpResponse(
                 status_code=400,
                 body={
-                    "message": "O campo 'limit' não pode ser negativo!"
+                    "message": "O campo 'limit' não pode ser negativo!",
+                    "code": "NEGATIVE_LIMIT_ERROR"
                 }
             )
         
@@ -60,10 +61,18 @@ class ListLostItemsSummarizedController:
                     {
                         "id": dto.item_id,
                         "name": dto.item_name,
-                        "user": dto.user_name,
-                        "category": dto.category_name,
-                        "location": dto.building_space_name,
-                        "image_url": dto.image_url,
+                        "user": {
+                            "name": dto.user_name,
+                        },
+                        "category": {
+                            "name": dto.category_name,
+                        },
+                        "lost_building_space": {
+                            "name": dto.building_space_name,
+                        },
+                        "image": {
+                            "url": dto.image_url,
+                        }
                     }
                 for dto in dtos
                 ],
@@ -77,10 +86,18 @@ class ListLostItemsSummarizedController:
                     {
                         "id": dto.item_id,
                         "name": dto.item_name,
-                        "user": dto.user_name,
-                        "category": dto.category_name,
-                        "location": dto.building_space_name,
-                        "image_url": dto.image_url,
+                        "user": {
+                            "name": dto.user_name
+                        },
+                        "category": {
+                            "name": dto.category_name,
+                        },
+                        "lost_building_space": {
+                            "name": dto.building_space_name,
+                        },
+                        "image": {
+                            "url": dto.image_url,
+                        },
                     }
                 for dto in dtos[:limit]
                 ],
