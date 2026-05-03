@@ -60,7 +60,7 @@ def test_login_controller_with_field_missing():
 
     http_response = controller.handle(http_request)
 
-    expected_body = {"message": "Campos obrigatórios não informados"}
+    expected_body = {"message": "Campos obrigatórios não informados", "code": "REQUIRED_FIELD_MISSING_ERROR"}
 
     assert http_response.status_code == 400 and http_response.body == expected_body
 
