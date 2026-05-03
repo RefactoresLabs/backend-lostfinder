@@ -4,6 +4,10 @@ from backend.app.presentation.schemas.http_response import HttpResponse
 from backend.app.application.dtos.create_found_item_dto import CreateFoundItemDTO
 from backend.app.application.use_cases.create_found_item_use_case import CreateFoundItemUseCase
 
+from backend.app.domain.exceptions.category_doesnt_exist_error import CategoryDoesntExistError
+from backend.app.domain.exceptions.building_space_doesnt_exist_error import BuildingSpaceDoesntExistError
+from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
+
 
 class CreateFoundItemController:
 
@@ -47,7 +51,8 @@ class CreateFoundItemController:
             return HttpResponse(
                 400,
                 {
-                    "message": "Campos obrigatórios não informados"
+                    "message": "Campos obrigatórios não informados",
+                    "code": "REQUIRED_FIELD_MISSING_ERROR",
                 }
             )
 
@@ -58,7 +63,9 @@ class CreateFoundItemController:
                 return HttpResponse(
                     400,
                     {
-                        "message": f"Campo {field} está vazio"
+                        "message": f"Campo {field} está vazio",
+                        "code": "EMPTY_FIELD_ERROR",
+                        "field": "email",
                     }
                 )
 
@@ -76,21 +83,41 @@ class CreateFoundItemController:
 
         try:
 
-            result = self.__use_case.execute(dto)
+            self.__use_case.execute(dto)
 
             return HttpResponse(
                 201,
                 {
                     "message": "Item encontrado registrado com sucesso!",
-                    "data": result,
                 }
             )
 
-        except ValueError as exc:
+        except CategoryDoesntExistError as exc:
 
             return HttpResponse(
-                404,
+                400,
                 {
-                    "message": str(exc)
+                    "message": str(exc),
+                    "code": "CATEGORY_DOESNT_EXIST_ERROR"
+                }
+            )
+
+        except BuildingSpaceDoesntExistError as exc:
+
+            return HttpResponse(
+                400,
+                {
+                    "message": str(exc),
+                    "code": "BUILDING_SPACE_DOESNT_EXIST_ERROR",
+                }
+            )
+
+        except UserAccountDoesntExistError as exc:
+
+            return HttpResponse(
+                400,
+                {
+                    "message": str(exc),
+                    "code": "USER_ACCOUNT_DOESNT_EXIST_ERROR",
                 }
             )
