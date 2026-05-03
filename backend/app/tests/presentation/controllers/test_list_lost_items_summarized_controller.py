@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from backend.app.presentation.controllers.list_lost_items_summarized_controller import ListLostItemsSummarizedController
 from backend.app.presentation.schemas.http_request import HttpRequest
 
-from backend.app.application.dtos.list_lost_items_summarized_dto import ListLostItemsSummarizedDTO
+from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
 
 
 def test_list_lost_items_controller_no_limit():
@@ -12,7 +12,7 @@ def test_list_lost_items_controller_no_limit():
     use_case = Mock()
 
     use_case.execute.return_value = [
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=1,
             item_name="Lápis",
             user_name="Link",
@@ -20,7 +20,7 @@ def test_list_lost_items_controller_no_limit():
             building_space_name="sala 1",
             image_url="./storage/image1.png"
         ),
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=2,
             item_name="Caneta",
             user_name="Mario",
@@ -47,7 +47,7 @@ def test_list_lost_items_controller_limit():
     use_case = Mock()
 
     use_case.execute.return_value = [
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=1,
             item_name="Lápis",
             user_name="Link",
@@ -55,7 +55,7 @@ def test_list_lost_items_controller_limit():
             building_space_name="sala 1",
             image_url="./storage/image1.png"
         ),
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=2,
             item_name="Caneta",
             user_name="Mario",
@@ -82,7 +82,7 @@ def test_list_lost_items_controller_negative_limit():
     use_case = Mock()
 
     use_case.execute.return_value = [
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=1,
             item_name="Lápis",
             user_name="Link",
@@ -90,7 +90,7 @@ def test_list_lost_items_controller_negative_limit():
             building_space_name="sala 1",
             image_url="./storage/image1.png"
         ),
-        ListLostItemsSummarizedDTO(
+        ListItemsSummarizedDTO(
             item_id=2,
             item_name="Caneta",
             user_name="Mario",
