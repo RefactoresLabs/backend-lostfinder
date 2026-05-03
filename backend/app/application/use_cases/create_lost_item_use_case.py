@@ -4,6 +4,9 @@ from backend.app.domain.repositories.building_space_repository_interface import 
 from backend.app.domain.repositories.user_account_repository_interface import UserAccountRepositoryInterface
 from backend.app.domain.entities.lost_item import LostItem
 from backend.app.domain.value_objects.image import Image
+from backend.app.domain.exceptions.category_doesnt_exist_error import CategoryDoesntExistError
+from backend.app.domain.exceptions.building_space_doesnt_exist_error import BuildingSpaceDoesntExistError
+from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
 
 from backend.app.application.dtos.create_lost_item_dto import CreateLostItemDTO
 
@@ -43,7 +46,7 @@ class CreateLostItemUseCase:
         self.__building_space_repository = building_space_repository
         self.__user_account_repository = user_account_repository
 
-    def execute(self, dto: CreateLostItemDTO) -> dict:
+    def execute(self, dto: CreateLostItemDTO) -> None:
 
         """Executa o fluxo de eventos do caso de uso criar item perdido
 
@@ -52,35 +55,36 @@ class CreateLostItemUseCase:
         dto: CreateLostItemDTO
             Objeto de transferência de dados com as informações do item perdido
 
-        Returns
-        -------
-        dict
-            Dicionário com os dados do item perdido registrado
-
         Raises
         ------
-        ValueError
-            Se a categoria, espaço do prédio ou conta de usuário não forem encontrados
-
+        CategoryDoesntExistError
+            Exceção levantada quando a categoria não é encontrada
+        
+        BuildingSpaceDoesntExistError
+            Exceção levantada quando o espaço do prédio não é encontrado
+        
+        UserAccountDoesntExistError
+            Exceção levantada quando a conta de usuário não é encontrada
+            
         """
 
         category = self.__category_repository.get_category_by_id(dto.category_id)
 
         if category is None:
 
-            raise ValueError("Categoria não encontrada")
+            raise CategoryDoesntExistError("Categoria não encontrada")
 
         building_space = self.__building_space_repository.get_building_space_by_id(dto.lost_building_space_id)
 
         if building_space is None:
 
-            raise ValueError("Espaço do prédio não encontrado")
+            raise BuildingSpaceDoesntExistError("Espaço do prédio não encontrado")
 
         user_account = self.__user_account_repository.get_user_account_by_id(dto.user_id)
 
         if user_account is None:
 
-            raise ValueError("Conta de usuário não encontrada")
+            raise UserAccountDoesntExistError("Conta de usuário não encontrada")
 
         images = [Image(url=url) for url in dto.image_urls]
 
@@ -94,12 +98,4 @@ class CreateLostItemUseCase:
             approx_lost_building_space=building_space,
         )
 
-        created_lost_item = self.__lost_item_repository.create_new_lost_item(lost_item)
-
-        return {
-            "id": created_lost_item.id,
-            "name": created_lost_item.name,
-            "description": created_lost_item.description,
-            "category": created_lost_item.category.name,
-            "lost_building_space": created_lost_item.approx_lost_building_space.name,
-        }
+        _ = self.__lost_item_repository.create_new_lost_item(lost_item)
