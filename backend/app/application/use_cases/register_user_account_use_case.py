@@ -4,7 +4,6 @@ from backend.app.domain.entities.user_account import UserAccount
 from backend.app.application.services.user_account_validation_service import UserAccountValidationService
 from backend.app.application.dtos.register_user_account_dto import RegisterUserAccountDTO
 from backend.app.application.interfaces.password_hasher import PasswordHasher
-from backend.app.application.exceptions.passwords_dont_match_error import PasswordsDontMatchError
 
 class RegisterUserAccountUseCase:
 
@@ -52,4 +51,4 @@ class RegisterUserAccountUseCase:
                 hashed_password,
                 dto.phone,
             )
-        )
+        )
