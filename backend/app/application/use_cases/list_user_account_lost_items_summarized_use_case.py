@@ -3,13 +3,14 @@ from backend.app.application.dtos.list_user_account_items_summarized_input_dto i
 from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
 
 from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
+from backend.app.domain.repositories.user_account_repository_interface import UserAccountRepositoryInterface
 
 
 class ListUserAccountLostItemsSummarizedUseCase:
 
     """Representa um caso de uso de listar os itens perdidos resumidos de uma conta de usuário específica"""
 
-    def __init__(self, lost_item_query_service: LostItemQueryServiceInterface) -> None:
+    def __init__(self, lost_item_query_service: LostItemQueryServiceInterface, user_account_repository: UserAccountRepositoryInterface) -> None:
 
         """Inicializa os atributos de instância de ListUserAccountLostItemsSummarizedUseCase
 
@@ -18,10 +19,13 @@ class ListUserAccountLostItemsSummarizedUseCase:
         lost_item_query_service: LostItemQueryServiceInterface
             Serviço de consulta de itens perdidos
         
+        user_repository: UserAccountRepositoryInterface
+            Repositório de conta de usuários
         
         """
 
         self.__query_service = lost_item_query_service
+        self.__user_account_repository = user_account_repository
     
     def execute(self, dto: ListUserAccountItemsSummarizedInputDTO) -> list[ListItemsSummarizedDTO]:
 
@@ -44,11 +48,13 @@ class ListUserAccountLostItemsSummarizedUseCase:
 
         """
 
-        lost_items = self.__query_service.get_lost_items_summarized_by_user_id(dto.user_id)
+        user_account = self.__user_account_repository.get_user_account_by_id(dto.user_id)
 
-        if not lost_items:
+        if not user_account:
 
             raise UserAccountDoesntExistError("A conta de usuário não foi encontrada!")
+
+        lost_items = self.__query_service.get_lost_items_summarized_by_user_id(dto.user_id)
 
         return [
             ListItemsSummarizedDTO(
