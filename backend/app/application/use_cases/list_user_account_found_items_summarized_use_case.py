@@ -3,13 +3,14 @@ from backend.app.application.dtos.list_user_account_items_summarized_input_dto i
 from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
 
 from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
+from backend.app.domain.repositories.user_account_repository_interface import UserAccountRepositoryInterface
 
 
 class ListUserAccountFoundItemsSummarizedUseCase:
 
     """Representa um caso de uso de listar os itens encontrados resumidos de uma conta de usuário específica"""
 
-    def __init__(self, found_item_query_service: FoundItemQueryServiceInterface) -> None:
+    def __init__(self, found_item_query_service: FoundItemQueryServiceInterface, user_account_repository: UserAccountRepositoryInterface) -> None:
 
         """Inicializa os atributos de instância de ListUserAccountFoundItemsSummarizedUseCase
 
@@ -18,10 +19,13 @@ class ListUserAccountFoundItemsSummarizedUseCase:
         found_item_query_service: FoundItemQueryServiceInterface
             Serviço de consulta de itens encontrados
         
-        
+        user_repository: UserAccountRepositoryInterface
+            Repositório de conta de usuários
+
         """
 
         self.__query_service = found_item_query_service
+        self.__user_account_repository = user_account_repository
     
     def execute(self, dto: ListUserAccountItemsSummarizedInputDTO) -> list[ListItemsSummarizedDTO]:
 
@@ -44,11 +48,13 @@ class ListUserAccountFoundItemsSummarizedUseCase:
 
         """
 
-        found_items = self.__query_service.get_found_items_summarized_by_user_id(dto.user_id)
+        user_account = self.__user_account_repository.get_user_account_by_id(dto.user_id)
 
-        if not found_items:
+        if not user_account:
 
             raise UserAccountDoesntExistError("A conta de usuário não foi encontrada!")
+
+        found_items = self.__query_service.get_found_items_summarized_by_user_id(dto.user_id)
 
         return [
             ListItemsSummarizedDTO(
