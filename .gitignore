@@ -6,3 +6,12 @@
 
 # Cache
 **/__pycache__
+
+# Cache - Pytest
+**/.pytest_cache
+
+# Banco de dados
+**/*.db
+
+# Uploads (arquivos gerados)
+uploads/
