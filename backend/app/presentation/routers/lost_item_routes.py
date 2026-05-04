@@ -11,6 +11,7 @@ from backend.app.presentation.controllers.factories.lost_item_factories import (
         make_list_lost_item_summarized_controller,
         make_create_lost_item_controller,
         make_get_lost_item_details_controller,
+        make_list_user_account_lost_item_summarized_controller
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -71,11 +72,12 @@ def create_lost_item_routes(app: Flask) -> None:
 
         with SessionManager(database_url) as session_manager:
 
-            limit_match = re.compile("(?<=limit=)-?\d+").search(request.url)
+            limit = request.args.get("limit", 0)
+            body = request.get_json() if request.data else {}
 
             http_request = HttpRequest(
-                params={"limit": limit_match.group()} if limit_match else {},
-                body=request.get_json()
+                params={"limit": limit},
+                body=body
             )
 
             list_lost_item_summarized_controller = make_list_lost_item_summarized_controller(
@@ -86,7 +88,7 @@ def create_lost_item_routes(app: Flask) -> None:
         
         return jsonify(http_response.body), http_response.status_code
     
-    @app.route("/lost-items/{item_id}", methods=["GET"])
+    @app.route("/lost-items/<item_id>", methods=["GET"])
     @jwt_required
     def get_lost_item_details(item_id: int):
 
@@ -110,6 +112,33 @@ def create_lost_item_routes(app: Flask) -> None:
             )
 
             http_response = get_lost_item_details_controller.handle(http_request)
+
+            return jsonify(http_response.body), http_response.status_code
+    
+    @app.route("/my-lost-items", methods=["GET"])
+    @jwt_required
+    def list_user_account_lost_items_summarized():
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ["DATABASE"],
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "user_id": request.user_payload["user_id"],
+                },
+            )
+
+            list_user_account_lost_item_summarized_controller = make_list_user_account_lost_item_summarized_controller(
+                session_manager.session,
+            )
+
+            http_response = list_user_account_lost_item_summarized_controller.handle(http_request)
 
             return jsonify(http_response.body), http_response.status_code
 
