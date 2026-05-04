@@ -1,10 +1,12 @@
 from backend.app.application.use_cases.list_lost_items_summarized_use_case import ListLostItemsSummarizedUseCase
 from backend.app.application.use_cases.create_lost_item_use_case import CreateLostItemUseCase
 from backend.app.application.use_cases.get_lost_item_details_use_case import GetLostItemDetailsUseCase
+from backend.app.application.use_cases.list_user_account_lost_items_summarized_use_case import ListUserAccountLostItemsSummarizedUseCase
 
 from backend.app.presentation.controllers.list_lost_items_summarized_controller import ListLostItemsSummarizedController
 from backend.app.presentation.controllers.create_lost_item_controller import CreateLostItemController
 from backend.app.presentation.controllers.get_lost_item_details_controller import GetLostItemDetailsController
+from backend.app.presentation.controllers.list_user_account_lost_items_summarized_controller import ListUserAccountLostItemsSummarizedController
 
 from backend.app.infrastructure.persistence.repositories.lost_item_repository import LostItemRepository
 from backend.app.infrastructure.persistence.repositories.category_repository import CategoryRepository
@@ -90,3 +92,25 @@ def make_get_lost_item_details_controller(session: Session) -> GetLostItemDetail
     use_case = GetLostItemDetailsUseCase(repository)
 
     return GetLostItemDetailsController(use_case)
+
+def make_list_user_account_lost_item_summarized_controller(session: Session) -> ListUserAccountLostItemsSummarizedController:
+
+    """Factory function que cria um objeto ListUserAccountLostItemsSummarizedController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    ListUserAccountLostItemsSummarizedController
+        Ponto de acesso do endpoint com o caso de uso de listar itens perdidos resumidamente de uma conta de usuário
+        
+    """
+
+    query_service = LostItemQueryService(session)
+
+    use_case = ListUserAccountLostItemsSummarizedUseCase(query_service)
+
+    return ListUserAccountLostItemsSummarizedController(use_case)
