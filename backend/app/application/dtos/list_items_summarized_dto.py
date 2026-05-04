@@ -1,6 +1,6 @@
 class ListItemsSummarizedDTO:
 
-    """Objeto de transferência de dados para os casos de uso de listar itens resumidamente (perdidos ou encontrados)"""
+    """Objeto de transferência de dados para os casos de uso de listar itens resumidamente (perdidos ou encontrados), associados ou não a uma conta de usuário"""
 
     def __init__(self, item_id: int, item_name: str, user_name: str, category_name: str, building_space_name: str, image_url: str) -> None:
 
