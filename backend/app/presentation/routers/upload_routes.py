@@ -1,5 +1,8 @@
-from flask import request, jsonify
+import os
+from flask import request, jsonify, send_from_directory
 from backend.app.infrastructure.storage.local_storage import LocalStorage
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '..', 'uploads')
 
 def create_upload_routes(app):
 
@@ -20,3 +23,7 @@ def create_upload_routes(app):
         return jsonify({
             "url": path
         })
+
+    @app.route("/uploads/<path:filename>")
+    def serve_upload(filename):
+        return send_from_directory(UPLOAD_DIR, filename)
