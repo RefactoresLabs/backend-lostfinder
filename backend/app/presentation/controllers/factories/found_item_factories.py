@@ -1,6 +1,7 @@
 from backend.app.application.use_cases.create_found_item_use_case import CreateFoundItemUseCase
 from backend.app.application.use_cases.list_found_items_summarized_use_case import ListFoundItemsSummarizedUseCase
 from backend.app.application.use_cases.get_found_item_details_use_case import GetFoundItemDetailsUseCase
+from backend.app.application.use_cases.list_user_account_found_items_summarized_use_case import ListUserAccountFoundItemsSummarizedUseCase
 
 from backend.app.infrastructure.persistence.repositories.found_item_repository import FoundItemRepository
 from backend.app.infrastructure.persistence.repositories.category_repository import CategoryRepository
@@ -11,8 +12,10 @@ from backend.app.infrastructure.queries.found_item_query_service import FoundIte
 from backend.app.presentation.controllers.create_found_item_controller import CreateFoundItemController
 from backend.app.presentation.controllers.list_found_items_summarized_controller import ListFoundItemsSummarizedController
 from backend.app.presentation.controllers.get_found_item_details_controller import GetFoundItemDetailsController
+from backend.app.presentation.controllers.list_user_account_found_items_summarized_controller import ListUserAccountFoundItemsSummarizedController
 
 from sqlalchemy.orm import Session
+
 
 def make_list_found_item_summarized_controller(session: Session):
 
@@ -87,3 +90,25 @@ def make_get_found_item_details_controller(session: Session) -> GetFoundItemDeta
     use_case = GetFoundItemDetailsUseCase(repository)
 
     return GetFoundItemDetailsController(use_case)
+
+def make_list_user_account_found_item_summarized_controller(session: Session) -> ListUserAccountFoundItemsSummarizedUseCase:
+
+    """Factory function que cria um objeto ListUserAccountFoundItemsSummarizedController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    ListUserAccountFoundItemsSummarizedController
+        Ponto de acesso do endpoint com o caso de uso de listar itens encontrados resumidamente de uma conta de usuário
+        
+    """
+
+    query_service = FoundItemQueryService(session)
+
+    use_case = ListUserAccountFoundItemsSummarizedUseCase(query_service)
+
+    return ListUserAccountFoundItemsSummarizedController(use_case)
