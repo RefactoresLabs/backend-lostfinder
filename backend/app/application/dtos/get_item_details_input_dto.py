@@ -26,3 +26,5 @@ class GetItemDetailsInputDTO:
             ID do item
 
         """
+
+        return self.__id
