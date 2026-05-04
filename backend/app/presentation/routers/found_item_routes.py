@@ -69,7 +69,7 @@ def create_found_item_routes(app: Flask) -> None:
 
         with SessionManager(database_url) as session_manager:
 
-            limit = request.args.get("limit", 0)
+            limit = int(request.args.get("limit", 0))
             body = request.get_json() if request.data else {}
 
             http_request = HttpRequest(
