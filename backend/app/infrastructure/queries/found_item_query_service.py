@@ -91,3 +91,70 @@ class FoundItemQueryService(FoundItemQueryServiceInterface):
             }
         for result in results
         ]
+    
+    def get_found_items_summarized_by_user_id(self, user_id: int) -> list[dict[str, Any]]:
+        
+        """Obtém os dados resumidos das instâncias associadas a found_item de uma conta de usuário, através do ID desse usuário
+
+        Parameters
+        ----------
+        user_id: int
+            ID da conta de usuário pelo qual os itens encontrados associados serão obtidos
+
+        Returns
+        -------
+        list[dict[str, Any]]
+            Iterável com dados resumidos de itens encontrados
+
+        """
+
+        # Agrega o ID do item associado a imagem pela imagem registrada primeiro (menor ID)
+        subquery = (
+            self.__session.query(
+                ImageModel.item_id,
+                func.min(ImageModel.id).label("min_image_id")
+            ).group_by(
+                ImageModel.item_id
+            ).subquery()
+        )
+
+        results = self.__session.query(
+            ItemModel.id,
+            ItemModel.name,
+            UserAccountModel.name,
+            CategoryModel.name,
+            BuildingSpaceModel.name,
+            ImageModel.url,
+        ).join(
+            FoundItemModel,
+            FoundItemModel.id == ItemModel.id,
+        ).join(
+            UserAccountModel,
+            UserAccountModel.id == ItemModel.user_id,
+        ).join(
+            CategoryModel,
+            CategoryModel.id == ItemModel.category_id,
+        ).join(
+            BuildingSpaceModel,
+            BuildingSpaceModel.id == FoundItemModel.found_space_id,
+        ).outerjoin(
+            subquery,
+            subquery.c.item_id == ItemModel.id,
+        ).outerjoin(
+            ImageModel,
+            ImageModel.id == subquery.c.min_image_id,
+        ).filter(
+            UserAccountModel.id == user_id,
+        ).all()
+        
+        return [
+            {
+                "item_id": result[0],
+                "item_name": result[1],
+                "user_name": result[2],
+                "category_name": result[3],
+                "building_space_name": result[4],
+                "image_url": result[5],
+            }
+        for result in results
+        ]
