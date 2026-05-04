@@ -111,6 +111,8 @@ def make_list_user_account_lost_item_summarized_controller(session: Session) -> 
 
     query_service = LostItemQueryService(session)
 
-    use_case = ListUserAccountLostItemsSummarizedUseCase(query_service)
+    repository = UserAccountRepository(session)
+
+    use_case = ListUserAccountLostItemsSummarizedUseCase(query_service, repository)
 
     return ListUserAccountLostItemsSummarizedController(use_case)
