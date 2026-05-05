@@ -13,8 +13,8 @@ class LocalizationModel(Base):
 
     id = mapped_column(Integer, primary_key=True)
     cep = mapped_column(String(255), nullable=False)
-    neighborhood = mapped_column(String(255), nullable=False)
-    street = mapped_column(String(255), nullable=False)
+    neighborhood = mapped_column("bairro", String(255), nullable=False)
+    street = mapped_column("rua", String(255), nullable=False)
 
     def __repr__(self) -> str:
 

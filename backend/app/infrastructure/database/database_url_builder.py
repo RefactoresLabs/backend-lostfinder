@@ -46,8 +46,9 @@ class DatabaseURLBuilder:
 
                 raise TypeError(f"O valor de {field} precisa ser String!")
         
-        user = data["USERNAME"]
-        password = data["PASSWORD"]
+        from urllib.parse import quote_plus
+        user = quote_plus(data["USERNAME"])
+        password = quote_plus(data["PASSWORD"])
         host = data["HOSTNAME"]
         port = data["PORT"]
         database = data["DATABASE"]
