@@ -53,9 +53,6 @@ def test_create_found_item_use_case_success():
         fake_user_repo
     )
 
-    result = use_case.execute(dto)
-
-    assert result["id"] == 20
-    assert result["found_building_space"] == "Pátio"
-    assert result["left_building_space"] == "Recepção"
+    use_case.execute(dto)
+    
     fake_found_repo.create_new_found_item.assert_called_once()

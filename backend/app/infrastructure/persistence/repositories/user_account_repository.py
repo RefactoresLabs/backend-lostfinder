@@ -3,7 +3,9 @@ from backend.app.domain.entities.user_account import UserAccount
 
 from backend.app.infrastructure.persistence.models.user_account_model import UserAccountModel
 
+
 from sqlalchemy.orm import Session
+
 
 class UserAccountRepository(UserAccountRepositoryInterface):
 
@@ -22,7 +24,7 @@ class UserAccountRepository(UserAccountRepositoryInterface):
 
         self.__session = session
 
-    def create_new_user_account(self, user_account: UserAccount) -> UserAccount:
+    def create_new_user_account(self, user_account: UserAccount) -> UserAccount | None:
 
         """Cria uma nova instância da tabela user_account
 
@@ -33,7 +35,7 @@ class UserAccountRepository(UserAccountRepositoryInterface):
         
         Returns
         -------
-        UserAccount
+        UserAccount | None
             Objeto da entidade conta de usuário com os dados armazenados
         """
 
@@ -71,7 +73,7 @@ class UserAccountRepository(UserAccountRepositoryInterface):
         """
         pass
 
-    def get_user_account_by_id(self, id: int) -> UserAccount:
+    def get_user_account_by_id(self, id: int) -> UserAccount | None:
 
         """Obtém uma instância da tabela user_account através do ID
 
@@ -82,7 +84,7 @@ class UserAccountRepository(UserAccountRepositoryInterface):
 
         Returns
         -------
-        UserAccount
+        UserAccount | None
             Objeto da entidade conta de usuário com os dados buscados
         
         """

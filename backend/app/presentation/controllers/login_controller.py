@@ -47,14 +47,21 @@ class LoginController:
         if not all([field in body.keys() for field in required_fields]):
             return HttpResponse(
                 400,
-                {"message": "Campos obrigatórios não informados"},
+                {
+                    "message": "Campos obrigatórios não informados",
+                    "code": "REQUIRED_FIELD_MISSING_ERROR",
+                },
             )
 
         for field in required_fields:
             if isinstance(body[field], str) and not body[field].strip():
                 return HttpResponse(
                     400,
-                    {"message": f"Campo {field} está vazio"},
+                    {
+                        "message": f"Campo {field} está vazio",
+                        "code": "EMPTY_FIELD_ERROR",
+                        "field": field,
+                    },
                 )
 
         dto = LoginDTO(
@@ -67,11 +74,16 @@ class LoginController:
 
             return HttpResponse(
                 200,
-                {"token": token},
+                {
+                    "token": token
+                },
             )
 
         except InvalidCredentialsError as exc:
             return HttpResponse(
                 401,
-                {"message": str(exc)},
+                {
+                    "message": str(exc),
+                    "code": "INVALID_CREDENTIALS_ERROR",
+                },
             )

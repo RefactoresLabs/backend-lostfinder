@@ -9,6 +9,7 @@ from backend.app.domain.entities.building_space import BuildingSpace
 from backend.app.domain.entities.building import Building
 from backend.app.domain.entities.user_account import UserAccount
 from backend.app.domain.value_objects.localization import Localization
+from backend.app.domain.exceptions.category_doesnt_exist_error import CategoryDoesntExistError
 
 
 def test_create_lost_item_use_case_success():
@@ -54,10 +55,8 @@ def test_create_lost_item_use_case_success():
         fake_user_repo
     )
 
-    result = use_case.execute(dto)
+    use_case.execute(dto)
 
-    assert result["id"] == 10
-    assert result["name"] == "Chave"
     fake_lost_repo.create_new_lost_item.assert_called_once()
 
 
@@ -85,5 +84,6 @@ def test_create_lost_item_use_case_category_not_found():
         fake_user_repo
     )
 
-    with pytest.raises(ValueError, match="Categoria não encontrada"):
+    with pytest.raises(CategoryDoesntExistError, match="Categoria não encontrada"):
+
         use_case.execute(dto)

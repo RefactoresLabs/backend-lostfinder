@@ -13,3 +13,5 @@
 # Banco de dados
 **/*.db
 
+# Uploads (arquivos gerados)
+uploads/

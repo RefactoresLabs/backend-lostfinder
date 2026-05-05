@@ -30,7 +30,13 @@ def jwt_required(f):
         auth_header = request.headers.get("Authorization")
 
         if not auth_header or not auth_header.startswith("Bearer "):
-            return jsonify({"message": "Token de autenticação não informado"}), 401
+
+            return jsonify(
+                {
+                    "message": "Token de autenticação não informado",
+                    "code": "TOKEN_NOT_PROVIDED",
+                }
+            ), 401
 
         token = auth_header.split(" ")[1]
 
@@ -39,10 +45,20 @@ def jwt_required(f):
             request.user_payload = payload
 
         except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Token expirado"}), 401
+            return jsonify(
+                {
+                    "message": "Token expirado",
+                    "code": "EXPIRED_SIGNATURE_ERROR",
+                }
+            ), 401
 
         except jwt.InvalidTokenError:
-            return jsonify({"message": "Token inválido"}), 401
+            return jsonify(
+                {
+                    "message": "Token inválido",
+                    "code": "INVALID_TOKEN_ERROR",
+                }
+            ), 401
 
         return f(*args, **kwargs)
 

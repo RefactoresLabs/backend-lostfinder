@@ -6,6 +6,7 @@ from backend.app.application.use_cases.register_user_account_use_case import Reg
 
 from backend.app.domain.exceptions.email_exists_error import EmailExistsError
 
+
 class RegisterUserAccountController:
 
     """Ponto de acesso entre o endpoint e caso de uso RegisterUserAccountUseCase"""
@@ -48,7 +49,8 @@ class RegisterUserAccountController:
             return HttpResponse(
                 400, 
                 {
-                    "message": "Campos obrigatórios não informados"
+                    "message": "Campos obrigatórios não informados",
+                    "code": "REQUIRED_FIELD_MISSING_ERROR",
                 }
             )
         
@@ -59,7 +61,9 @@ class RegisterUserAccountController:
                 return HttpResponse(
                     400, 
                     {
-                        "message": f"Campo {field} está vazio"
+                        "message": f"Campo {field} está vazio",
+                        "code": "EMPTY_FIELD_ERROR",
+                        "field": field
                     }
                 )
 
@@ -69,7 +73,8 @@ class RegisterUserAccountController:
             return HttpResponse(
                 400, 
                 {
-                    "message": "Senha e confirmar senha não correspondem"
+                    "message": "Senha e confirmar senha não correspondem",
+                    "code": "PASSWORD_MISMATCH_ERROR",
                 }
             )
         
@@ -87,16 +92,17 @@ class RegisterUserAccountController:
             return HttpResponse(
                 201, 
                 {
-                    "message": "conta de usuário registrada com sucesso!"
-                    }
-                )
+                    "message": "Conta de usuário registrada com sucesso"
+                }
+            )
 
         except EmailExistsError as exc:
 
             return HttpResponse(
                 409,
                 {
-                    "message": str(exc)
+                    "message": str(exc),
+                    "code": "EMAIL_ALREADY_EXISTS_ERROR",
                 }
             ) 
 

@@ -157,7 +157,7 @@ class LostItemRepository(LostItemRepositoryInterface):
 
         Returns
         -------
-        LosItem
+        LosItem | None
             Objeto da entidade item perdido com os dados buscados
         
         """

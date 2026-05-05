@@ -40,7 +40,7 @@ class FoundItemRepository(FoundItemRepositoryInterface):
 
         self.__session = session
 
-    def create_new_found_item(self, found_item: FoundItem) -> FoundItem:
+    def create_new_found_item(self, found_item: FoundItem) -> FoundItem | None:
 
         """Cria novas instâncias associadas a tabela found_item
 
@@ -51,7 +51,7 @@ class FoundItemRepository(FoundItemRepositoryInterface):
         
         Returns
         -------
-        FoundItem
+        FoundItem | None
             Objeto da entidade item encontrado com os dados armazenados
 
         """
@@ -160,7 +160,7 @@ class FoundItemRepository(FoundItemRepositoryInterface):
 
         Returns
         -------
-        FoundItem
+        FoundItem | None
             Objeto da entidade item encontrado com os dados buscados
         
         """

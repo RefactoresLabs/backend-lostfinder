@@ -2,6 +2,8 @@ from unittest.mock import Mock
 from backend.app.presentation.controllers.create_found_item_controller import CreateFoundItemController
 from backend.app.presentation.schemas.http_request import HttpRequest
 
+from backend.app.domain.exceptions.category_doesnt_exist_error import CategoryDoesntExistError
+
 
 def test_create_found_item_controller_success():
     use_case = Mock()
@@ -29,7 +31,7 @@ def test_create_found_item_controller_success():
 
 def test_create_found_item_controller_not_found_error():
     use_case = Mock()
-    use_case.execute.side_effect = ValueError("Categoria não encontrada")
+    use_case.execute.side_effect = CategoryDoesntExistError("Categoria não encontrada")
     
     controller = CreateFoundItemController(use_case)
     
@@ -46,5 +48,5 @@ def test_create_found_item_controller_not_found_error():
     
     response = controller.handle(http_request)
     
-    assert response.status_code == 404
+    assert response.status_code == 400
     assert response.body["message"] == "Categoria não encontrada"

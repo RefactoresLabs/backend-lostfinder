@@ -26,6 +26,11 @@ class UserAccountValidationService:
         ----------
         email: str
             E-mail a ser validado
+        
+        Raises
+        ------
+        EmailExistsError
+            Exceção levantada quando um e-mail já existe no banco
 
         """
         

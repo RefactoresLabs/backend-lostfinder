@@ -8,6 +8,19 @@ class BuildingRepositoryInterface(ABC):
     """Interface do repositório da entidade Building"""
 
     @abstractmethod
+    def get_all_buildings(self) -> list[Building]:
+        
+        """Obtém todas as instâncias associadas a tabela building
+
+        Returns
+        -------
+        list[Building]
+            Iterável com objetos da entidade Building
+
+        """
+        ...
+
+    @abstractmethod
     def get_building_by_id(self, id: int) -> Building | None:
 
         """Obtém uma entidade Building pelo seu identificador

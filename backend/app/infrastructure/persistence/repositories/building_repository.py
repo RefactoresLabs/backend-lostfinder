@@ -25,6 +25,41 @@ class BuildingRepository(BuildingRepositoryInterface):
 
         self.__session = session
 
+    def get_all_buildings(self) -> list[Building]:
+        
+        """Obtém todas as instâncias associadas a tabela building
+
+        Returns
+        -------
+        list[Building]
+            Iterável com objetos da entidade Building
+
+        """
+
+        rows = self.__session.query(
+            BuildingModel, LocalizationModel
+        ).join(
+            LocalizationModel,
+            LocalizationModel.id == BuildingModel.localization_id,
+        ).all()
+
+        if not rows:
+
+            return []
+        
+        return [
+            Building(
+                id=building_model.id,
+                name=building_model.name,
+                associated_localization=Localization(
+                    cep=localization_model.cep,
+                    neighborhood=localization_model.neighborhood,
+                    street=localization_model.street,
+                )
+            )
+            for building_model, localization_model in rows
+        ]
+
     def get_building_by_id(self, id: int) -> Building | None:
 
         """Obtém dados associados a uma instância da tabela building pelo ID

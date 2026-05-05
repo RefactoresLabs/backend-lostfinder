@@ -30,6 +30,7 @@ def test_create_user_account(session):
     repo = UserAccountRepository(session)
 
     user = UserAccount(
+        id=None,
         name="teste",
         email="teste@email.com",
         password="123",
@@ -55,6 +56,7 @@ def test_create_user_account_with_existing_email(session):
     repo = UserAccountRepository(session)
 
     user = UserAccount(
+        id=None,
         name="teste",
         email="teste@email.com",
         password="123",
@@ -62,6 +64,7 @@ def test_create_user_account_with_existing_email(session):
     )
 
     user2 = UserAccount(
+        id=None,
         name="teste2",
         email="teste@email.com",
         password="1234",

@@ -71,7 +71,8 @@ def test_controller_with_field_missing():
     http_response = controller.handle(http_request)
 
     excepted_body = {
-        "message": "Campos obrigatórios não informados"
+        "message": "Campos obrigatórios não informados",
+        "code": "REQUIRED_FIELD_MISSING_ERROR",
     }
 
     assert http_response.status_code == 400 and http_response.body == excepted_body
@@ -97,7 +98,8 @@ def test_controller_password_and_conf_password_dont_match():
     http_response = controller.handle(http_request)
 
     excepted_body = {
-        "message": "Senha e confirmar senha não correspondem"
+        "message": "Senha e confirmar senha não correspondem",
+        "code": "PASSWORD_MISMATCH_ERROR"
     }
 
     assert http_response.status_code == 400 and http_response.body == excepted_body

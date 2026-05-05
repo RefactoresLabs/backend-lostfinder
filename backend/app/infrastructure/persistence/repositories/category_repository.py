@@ -23,6 +23,33 @@ class CategoryRepository(CategoryRepositoryInterface):
         """
 
         self.__session = session
+    
+    def get_all_categories(self) -> list[Category]:
+
+        """Obtém todas as instâncias associadas a tabela category
+        
+        Returns
+        -------
+        list[Category]
+            Iterável com objetos da entidade Category
+
+        """
+
+        category_models = self.__session.query(
+            CategoryModel
+        ).all()
+
+        if not category_models:
+
+            return []
+
+        return [
+            Category(
+                id=category_model.id,
+                name=category_model.name,
+            )
+            for category_model in category_models
+        ]
 
     def get_category_by_id(self, id: int) -> Category | None:
 
