@@ -4,6 +4,7 @@ from backend.app.presentation.routers.user_account_routes import create_user_acc
 from backend.app.presentation.routers.login_routes import create_login_routes
 from backend.app.presentation.routers.lost_item_routes import create_lost_item_routes
 from backend.app.presentation.routers.found_item_routes import create_found_item_routes
+from backend.app.presentation.routers.building_routes import create_building_routes
 
 def create_app() -> Flask:
 
@@ -22,5 +23,6 @@ def create_app() -> Flask:
     create_login_routes(app)         # Rotas de autenticação
     create_lost_item_routes(app)     # Rotas de itens perdidos
     create_found_item_routes(app)    # Rotas de itens encontrados
+    create_building_routes(app)      # Rotas de prédios
 
     return app
