@@ -3,29 +3,26 @@ PRAGMA foreign_keys = ON;
 
 -- Tabela de contas dos usuários
 CREATE TABLE user_account (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    PRIMARY KEY(id)
+    phone VARCHAR(20) NOT NULL
 );
 
 -- Endereço base (sem prédio)
 CREATE TABLE localization (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     cep VARCHAR(8) NOT NULL,
-    bairro VARCHAR(255) NOT NULL,
-    rua VARCHAR(255) NOT NULL,
-    PRIMARY KEY(id)
+    neighborhood VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL
 );
 
 -- Prédios vinculados a uma localização
 CREATE TABLE building (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     localization_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
     CONSTRAINT fk_building_localization
         FOREIGN KEY (localization_id)
         REFERENCES localization(id),
@@ -34,10 +31,9 @@ CREATE TABLE building (
 
 -- Espaços dentro de um prédio (ex: sala, laboratório)
 CREATE TABLE building_space (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     building_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
     CONSTRAINT fk_space_building
         FOREIGN KEY (building_id)
         REFERENCES building(id),
@@ -46,33 +42,30 @@ CREATE TABLE building_space (
 
 -- Categorias de itens
 CREATE TABLE category (
-    id INTEGER AUTOINCREMENT,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    PRIMARY KEY(id)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Item base (herança)
 CREATE TABLE item (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    registry_date DATE NOT NULL,
+    registration_date DATE NOT NULL,
     category_id INTEGER NOT NULL,
-    account_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
+    user_id INTEGER NOT NULL,
     CONSTRAINT fk_item_category
         FOREIGN KEY (category_id)
         REFERENCES category(id),
     CONSTRAINT fk_item_account
-        FOREIGN KEY (account_id)
-        REFERENCES account(id)
+        FOREIGN KEY (user_id)
+        REFERENCES user_account(id)
 );
 
 -- Item perdido (especialização)
 CREATE TABLE lost_item (
-    id INTEGER,
+    id INTEGER PRIMARY KEY,
     lost_space_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
     CONSTRAINT fk_lost_item
         FOREIGN KEY (id)
         REFERENCES item(id),
@@ -83,10 +76,9 @@ CREATE TABLE lost_item (
 
 -- Item encontrado (especialização)
 CREATE TABLE found_item (
-    id INTEGER,
+    id INTEGER PRIMARY KEY,
     found_space_id INTEGER NOT NULL,
     left_space_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
     CONSTRAINT fk_found_item
         FOREIGN KEY (id)
         REFERENCES item(id),
@@ -100,10 +92,9 @@ CREATE TABLE found_item (
 
 -- Imagens associadas ao item
 CREATE TABLE image (
-    id INTEGER AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     url VARCHAR(255) NOT NULL,
     item_id INTEGER NOT NULL,
-    PRIMARY KEY(id),
     CONSTRAINT fk_image_item
         FOREIGN KEY (item_id)
         REFERENCES item(id)
