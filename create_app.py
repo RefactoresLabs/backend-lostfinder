@@ -1,4 +1,6 @@
+from backend.app.presentation.routers.upload_routes import create_upload_routes
 from flask import Flask
+from flask_cors import CORS
 
 from backend.app.presentation.routers.user_account_routes import create_user_account_routes
 from backend.app.presentation.routers.login_routes import create_login_routes
@@ -17,10 +19,12 @@ def create_app() -> Flask:
     """
 
     app = Flask(__name__)
+    CORS(app)
 
     create_user_account_routes(app) # Rotas das contas de usuários
     create_login_routes(app)         # Rotas de autenticação
     create_lost_item_routes(app)     # Rotas de itens perdidos
     create_found_item_routes(app)    # Rotas de itens encontrados
+    create_upload_routes(app)  # Rotas de upload de arquivos
 
     return app

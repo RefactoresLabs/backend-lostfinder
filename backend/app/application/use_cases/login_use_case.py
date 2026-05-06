@@ -70,6 +70,7 @@ class LoginUseCase:
         payload = {
             "user_id": user_account.id,
             "email": user_account.email,
+            "name": user_account.name,
         }
 
         return self.__token_generator.generate(payload)
