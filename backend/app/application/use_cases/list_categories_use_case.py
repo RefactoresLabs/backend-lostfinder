@@ -12,7 +12,7 @@ class ListCategoriesUseCase:
 
         Parameters
         ----------
-        category_repository:
+        category_repository: CategoryRepositoryInterface
             Repositório de categorias para busca de dados
 
         """
@@ -27,7 +27,7 @@ class ListCategoriesUseCase:
         -------
         ListCategoriesDTO
             Objetos de transferência de dados com os dados de cada categoria
-            
+
         """
 
         categories = self.__repository.get_all_categories()
