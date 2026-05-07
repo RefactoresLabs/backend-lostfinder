@@ -22,6 +22,15 @@ class ListCategoriesController:
     
     def handle(self) -> HttpResponse:
 
+        """Lista as categorias do sistema
+        
+        Returns
+        -------
+        HttpResponse
+            Resposta HTTP
+            
+        """
+
         dtos = self.__use_case.execute()
 
         return HttpResponse(
