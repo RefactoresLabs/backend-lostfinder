@@ -11,7 +11,8 @@ from unittest.mock import Mock
 
 def test_list_building_spaces_success():
 
-    repo = Mock()
+    building_space_repo = Mock()
+    building_repo = Mock()
 
     localization = Localization(
         cep="11111111",
@@ -25,7 +26,7 @@ def test_list_building_spaces_success():
         associated_localization=localization
     )
 
-    repo.get_building_spaces_by_building_id.return_value = [
+    building_space_repo.get_building_spaces_by_building_id.return_value = [
         BuildingSpace(
             id=1,
             name="Sala 1",
@@ -43,7 +44,9 @@ def test_list_building_spaces_success():
         )
     ]
 
-    use_case = ListBuildingSpacesUseCase(repo)
+    building_repo.get_building_by_id.return_value = building
+
+    use_case = ListBuildingSpacesUseCase(building_space_repo, building_repo)
 
     input_dto = ListBuildingSpacesInputDTO(1)
 
