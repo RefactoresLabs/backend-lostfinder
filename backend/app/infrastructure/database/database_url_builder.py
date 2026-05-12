@@ -36,7 +36,7 @@ class DatabaseURLBuilder:
             "USERNAME", 
             "PASSWORD", 
             "HOSTNAME", 
-            "PORT", 
+            "DATABASE_PORT", 
             "DATABASE"
         ]
 
@@ -50,7 +50,7 @@ class DatabaseURLBuilder:
         user = quote_plus(data["USERNAME"])
         password = quote_plus(data["PASSWORD"])
         host = data["HOSTNAME"]
-        port = data["PORT"]
+        port = data["DATABASE_PORT"]
         database = data["DATABASE"]
 
         return f"{driver}://{user}:{password}@{host}:{port}/{database}"
