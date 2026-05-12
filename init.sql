@@ -1,9 +1,6 @@
--- Ativar chaves estrangeiras
-PRAGMA foreign_keys = ON;
-
 -- Tabela de contas dos usuários
 CREATE TABLE user_account (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -12,7 +9,7 @@ CREATE TABLE user_account (
 
 -- Endereço base (sem prédio)
 CREATE TABLE localization (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     cep VARCHAR(8) NOT NULL,
     neighborhood VARCHAR(255) NOT NULL,
     street VARCHAR(255) NOT NULL
@@ -20,7 +17,7 @@ CREATE TABLE localization (
 
 -- Prédios vinculados a uma localização
 CREATE TABLE building (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     localization_id INTEGER NOT NULL,
     CONSTRAINT fk_building_localization
@@ -31,7 +28,7 @@ CREATE TABLE building (
 
 -- Espaços dentro de um prédio (ex: sala, laboratório)
 CREATE TABLE building_space (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     building_id INTEGER NOT NULL,
     CONSTRAINT fk_space_building
@@ -42,13 +39,13 @@ CREATE TABLE building_space (
 
 -- Categorias de itens
 CREATE TABLE category (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Item base (herança)
 CREATE TABLE item (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     registration_date DATE NOT NULL,
@@ -92,7 +89,7 @@ CREATE TABLE found_item (
 
 -- Imagens associadas ao item
 CREATE TABLE image (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id SERIAL PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
     item_id INTEGER NOT NULL,
     CONSTRAINT fk_image_item
@@ -100,3 +97,15 @@ CREATE TABLE image (
         REFERENCES item(id)
         ON DELETE CASCADE -- remove imagens quando o item for deletado
 );
+
+-- Insert categories
+INSERT INTO category(name) VALUES ('Material Escolar'), ('Acessório Pessoal'), ('Documento'), ('Eletrônico');
+
+-- Insert localization
+INSERT INTO localization(cep, neighborhood, street) VALUES ('65075441', 'Jardim Renascença', 'Coronel Colares Moreira');
+
+-- Insert building
+INSERT INTO building(name, localization_id) VALUES ('Centro Universitário UNDB', 1);
+
+-- Insert building spaces
+INSERT INTO building_space(name, building_id) VALUES ('Sala 206', 1), ('Refeitório', 1), ('Recepção', 1);
