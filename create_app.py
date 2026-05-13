@@ -1,4 +1,3 @@
-from backend.app.presentation.routers.upload_routes import create_upload_routes
 from flask import Flask
 from flask_cors import CORS
 
