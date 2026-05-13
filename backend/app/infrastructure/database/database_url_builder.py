@@ -53,4 +53,4 @@ class DatabaseURLBuilder:
         port = data["DATABASE_PORT"]
         database = data["DATABASE"]
 
-        return f"{driver}://{user}:{password}@{host}:{port}/{database}"
+        return f"{driver}://{user}:{password}@{host}:{port}/{database}?sslmode=require"
