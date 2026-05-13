@@ -87,7 +87,7 @@ class LostItemQueryService(LostItemQueryServiceInterface):
                 "user_name": result[2],
                 "category_name": result[3],
                 "building_space_name": result[4],
-                "image_url": result[5],
+                "image_url": result[5] if result[5] else ""
             }
         for result in results
         ]
@@ -154,7 +154,7 @@ class LostItemQueryService(LostItemQueryServiceInterface):
                 "user_name": result[2],
                 "category_name": result[3],
                 "building_space_name": result[4],
-                "image_url": result[5],
+                "image_url": result[5] if result[5] else ""
             }
         for result in results
         ]

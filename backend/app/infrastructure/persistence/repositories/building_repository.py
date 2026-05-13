@@ -5,7 +5,6 @@ from backend.app.domain.value_objects.localization import Localization
 from backend.app.infrastructure.persistence.models.building_model import BuildingModel
 from backend.app.infrastructure.persistence.models.localization_model import LocalizationModel
 
-
 from sqlalchemy.orm import Session
 
 
@@ -25,7 +24,7 @@ class BuildingRepository(BuildingRepositoryInterface):
         """
 
         self.__session = session
-    
+
     def get_all_buildings(self) -> list[Building]:
         
         """Obtém todas as instâncias associadas a tabela building
@@ -53,53 +52,53 @@ class BuildingRepository(BuildingRepositoryInterface):
                 id=building_model.id,
                 name=building_model.name,
                 associated_localization=Localization(
-                    localization_model.cep,
-                    localization_model.neighborhood,
-                    localization_model.street,
+                    cep=localization_model.cep,
+                    neighborhood=localization_model.neighborhood,
+                    street=localization_model.street,
                 )
             )
             for building_model, localization_model in rows
         ]
 
-    def get_buildind_by_id(self, id: int) -> Building | None:
+    def get_building_by_id(self, id: int) -> Building | None:
 
-        """Obtém os dados de uma instância associada a tabela building, através do ID
+        """Obtém dados associados a uma instância da tabela building pelo ID
 
         Parameters
         ----------
         id: int
-            ID do prédio cujos dados serão obtidos
-        
+            ID do prédio a ser obtido
+
         Returns
         -------
-        Building | None:
-            Objeto da Entidade Building
+        Building | None
+            Entidade prédio com os dados buscados, ou None se não encontrado
 
         """
 
-        row = self.__session.query(
-            BuildingModel,
-            LocalizationModel
+        result = self.__session.query(
+            BuildingModel, LocalizationModel
         ).join(
             LocalizationModel,
-            LocalizationModel.id == BuildingModel.localization_id
+            LocalizationModel.id == BuildingModel.localization_id,
         ).filter(
             BuildingModel.id == id
         ).first()
 
-        if not row:
+        if not result:
 
             return None
-        
-        building_model, localization_model = row
-        
-        return Building(
-                id=building_model.id,
-                name=building_model.name,
-                associated_localization=Localization(
-                    localization_model.cep,
-                    localization_model.neighborhood,
-                    localization_model.street,
-                )
-            )
 
+        building_model, localization_model = result
+
+        localization = Localization(
+            cep=localization_model.cep,
+            neighborhood=localization_model.neighborhood,
+            street=localization_model.street,
+        )
+
+        return Building(
+            id=building_model.id,
+            name=building_model.name,
+            associated_localization=localization,
+        )

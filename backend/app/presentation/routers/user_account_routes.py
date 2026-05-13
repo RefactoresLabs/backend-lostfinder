@@ -21,7 +21,11 @@ def create_user_account_routes(app: Flask) -> None:
         database_url = DatabaseURLBuilder.build(
             os.environ["SGBD"],
             {
-                "DATABASE": os.environ["DATABASE"]
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "PORT": os.environ.get("PORT"),
             },
         )
 
