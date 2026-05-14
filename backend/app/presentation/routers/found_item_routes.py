@@ -41,7 +41,7 @@ def create_found_item_routes(app: Flask) -> None:
                 "USERNAME": os.environ.get("USERNAME"),
                 "PASSWORD": os.environ.get("PASSWORD"),
                 "HOSTNAME": os.environ.get("HOSTNAME"),
-                "PORT": os.environ.get("PORT"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
             },
         )
 
@@ -71,7 +71,7 @@ def create_found_item_routes(app: Flask) -> None:
                 "USERNAME": os.environ.get("USERNAME"),
                 "PASSWORD": os.environ.get("PASSWORD"),
                 "HOSTNAME": os.environ.get("HOSTNAME"),
-                "PORT": os.environ.get("PORT"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
             },
         )
 
@@ -104,7 +104,7 @@ def create_found_item_routes(app: Flask) -> None:
                 "USERNAME": os.environ.get("USERNAME"),
                 "PASSWORD": os.environ.get("PASSWORD"),
                 "HOSTNAME": os.environ.get("HOSTNAME"),
-                "PORT": os.environ.get("PORT"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
             },
         )
 
@@ -135,7 +135,7 @@ def create_found_item_routes(app: Flask) -> None:
                 "USERNAME": os.environ.get("USERNAME"),
                 "PASSWORD": os.environ.get("PASSWORD"),
                 "HOSTNAME": os.environ.get("HOSTNAME"),
-                "PORT": os.environ.get("PORT"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
             },
         )
 
