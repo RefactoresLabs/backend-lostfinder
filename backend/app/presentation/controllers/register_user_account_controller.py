@@ -7,6 +7,9 @@ from backend.app.application.use_cases.register_user_account_use_case import Reg
 from backend.app.domain.exceptions.email_exists_error import EmailExistsError
 
 
+from sqlalchemy.exc import OperationalError
+
+
 class RegisterUserAccountController:
 
     """Ponto de acesso entre o endpoint e caso de uso RegisterUserAccountUseCase"""
@@ -103,6 +106,16 @@ class RegisterUserAccountController:
                 {
                     "message": str(exc),
                     "code": "EMAIL_ALREADY_EXISTS_ERROR",
+                }
+            )
+
+        except OperationalError:
+
+            return HttpResponse(
+                504,
+                {
+                    "message": "Tempo para estabelecer conexão excedido",
+                    "code": "OPERATIONAL_ERROR",
                 }
             ) 
 
