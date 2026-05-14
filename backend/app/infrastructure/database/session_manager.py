@@ -19,7 +19,10 @@ class SessionManager:
 
         """
 
-        self.__engine: Engine = create_engine(database_url)
+        self.__engine: Engine = create_engine(
+            database_url,
+            connect_args=dict(connect_timeout=5)
+        )
         self.__session = None
     
     @property
