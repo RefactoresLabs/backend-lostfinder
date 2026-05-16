@@ -1,5 +1,5 @@
-class ClaimDoesntExistError:
+class ClaimDoesntExistError(Exception):
 
-    """Exceção levantada quando uma negociação de recuperação de item não for encontrada"""
+    """Exceção levantada quando uma negociação de recuperação não é encontrada"""
 
     pass
