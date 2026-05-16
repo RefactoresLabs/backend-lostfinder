@@ -119,7 +119,8 @@ class ClaimRepository(ClaimRepositoryInterface):
         claim_status_id = result[0]
 
         claim_updated_data = {
-            "status_id": claim_status_id
+            "status_id": claim_status_id,
+            "retrieval_code": claim.retrieval_code
         }
 
         self.__session.query(
