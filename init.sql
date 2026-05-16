@@ -4,7 +4,8 @@ CREATE TABLE user_account (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(20) NOT NULL
+    phone VARCHAR(20) NOT NULL,
+    score INTEGER NOT NULL
 );
 
 -- Endereço base (sem prédio)
@@ -98,6 +99,31 @@ CREATE TABLE image (
         ON DELETE CASCADE -- remove imagens quando o item for deletado
 );
 
+-- Possíveis status da negociação de recuperação do item
+CREATE TABLE claim_status (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20) NOT NULL UNIQUE
+);
+
+-- Negociação/autorização de recuperação do item
+CREATE TABLE claim (
+    id SERIAL PRIMARY KEY,
+    created_at DATETIME NOT NULL,
+    retrieval_code VARCHAR(10) UNIQUE,
+    claimant_user_account_id INTEGER NOT NULL,
+    associated_found_item_id INTEGER NOT NULL,
+    status_id INTEGER NOT NULL,
+    CONSTRAINT fk_claimant_user_account
+        FOREIGN KEY (claimant_user_account_id)
+        REFERENCES user_account(id),
+    CONSTRAINT fk_associated_found_item
+        FOREIGN KEY (associated_found_item_id)
+        REFERENCES found_item(id),
+    CONSTRAINT fk_status
+        FOREIGN KEY (status_id)
+        REFERENCES claim_status(id)
+);
+
 -- Insert categories
 INSERT INTO category(name) VALUES ('Material Escolar'), ('Acessório Pessoal'), ('Documento'), ('Eletrônico');
 
@@ -109,3 +135,6 @@ INSERT INTO building(name, localization_id) VALUES ('Centro Universitário UNDB'
 
 -- Insert building spaces
 INSERT INTO building_space(name, building_id) VALUES ('Sala 206', 1), ('Refeitório', 1), ('Recepção', 1);
+
+-- Insert claim status
+INSERT INTO claim_status(name) VALUES ('Pendente'), ('Aceita'), ('Rejeitada'), ('Finalizada');
