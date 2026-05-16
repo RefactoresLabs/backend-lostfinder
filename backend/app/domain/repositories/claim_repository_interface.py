@@ -19,3 +19,6 @@ class ClaimRepositoryInterface(ABC):
 
     @abstractmethod
     def delete_claim(self, claim_id: int) -> bool: ...
+
+    @abstractmethod
+    def check_retrieval_code_exists(self, retrieval_code: str) -> bool: ...
