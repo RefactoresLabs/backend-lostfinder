@@ -1,0 +1,2002 @@
+openapi: 3.0.0
+info:
+  title: LostFinder
+  description: API para um sistema de achados e perdidos de universidade
+  version: "0.1"
+servers:
+- url: https://virtserver.swaggerhub.com/none-01f-955/LostFinder/0.1
+  description: SwaggerHub API Auto Mocking
+paths:
+  /users:
+    description: Esse caminho representa uma coleção de recursos correspondente ao usuário do sistema
+    post:
+      tags:
+      - Usuários
+      description: Adiciona um novo usuário ao sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+      responses:
+        "201":
+          description: Usuário cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Conta de usuário registrada com sucesso
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                empty_field:
+                  description: Algum campo obrigatório está vazio
+                  value:
+                    message: Campo email está vazio
+                    code: EMPTY_FIELD_ERROR
+                    field: email
+                required_field_missing:
+                  description: Campos obrigatórios não informados
+                  value:
+                    message: Campos obrigatórios não informados
+                    code: REQUIRED_FIELD_MISSING_ERROR
+                password_mismatch:
+                  description: Senha e confirmar senha não correspondem
+                  value:
+                    message: Senha e confirmar senha não correspondem
+                    code: PASSWORD_MISMATCH_ERROR
+        "409":
+          description: E-mail já existente
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Email já cadastrado
+                code: EMAIL_ALREADY_EXISTS_ERROR
+  /users/{user_id}:
+    description: Esse caminho representa um recurso de conta de usuário
+    get:
+      tags:
+      - Usuários
+      description: Obtém os dados de uma conta de usuário
+      parameters:
+      - name: user_id
+        in: path
+        description: ID da conta de usuário
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Conta de usuário obtida com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetUserDetailsResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Conta de usuário não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Conta de usuário não encontrada
+                code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Usuários
+      description: Atualiza os dados de uma conta de usuário
+      parameters:
+      - name: user_id
+        in: path
+        description: ID da conta de usuário
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+      responses:
+        "200":
+          description: Conta de usuário atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Conta de usuário atualizada com sucesso
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                password_mismatch:
+                  description: Senha e confirmar senha não correspondem
+                  value:
+                    message: Senha e confirmar senha não correspondem
+                    code: PASSWORD_MISMATCH_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Conta de usuário não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Conta de usuário não encontrada
+                code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /login:
+    description: Esse caminho representa o processo de autenticação do sistema
+    post:
+      tags:
+      - Autenticação
+      description: "Fornece um token que autoriza o usuário a acessar o sistema, a partir de credenciais válidas"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Autenticação feita com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                empty_field:
+                  description: Algum campo obrigatório está vazio
+                  value:
+                    message: Campo email está vazio
+                    code: EMPTY_FIELD_ERROR
+                    field: email
+                required_field_missing:
+                  description: Campos obrigatórios não informados
+                  value:
+                    message: Campos obrigatórios não informados
+                    code: REQUIRED_FIELD_MISSING_ERROR
+        "401":
+          description: Credenciais Inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Credenciais Inválidas
+                code: INVALID_CREDENTIALS_ERROR
+  /lost-items:
+    description: Esse caminho representa uma coleção de recursos correspondentes a itens perdidos
+    get:
+      tags:
+      - Itens Perdidos
+      description: Busca todos os itens perdidos de forma resumida
+      parameters:
+      - name: limit
+        in: query
+        description: Limite de itens perdidos obtidos
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Itens perdidos encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListLostItemsSummaryResponse"
+        "400":
+          description: Campo limite negativo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: O campo 'limit' não pode ser negativo!
+                code: NEGATIVE_LIMIT_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Itens Perdidos
+      description: Cria um item perdido no sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLostItemRequest"
+      responses:
+        "201":
+          description: Item perdido cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item perdido registrado com sucesso!
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                empty_field:
+                  description: Algum campo obrigatório está vazio
+                  value:
+                    message: Campo email está vazio
+                    code: EMPTY_FIELD_ERROR
+                    field: email
+                required_field_missing:
+                  description: Campos obrigatórios não informados
+                  value:
+                    message: Campos obrigatórios não informados
+                    code: REQUIRED_FIELD_MISSING_ERROR
+                category_doesnt_exists:
+                  description: Categoria não existente
+                  value:
+                    message: Categoria não encontrada
+                    code: CATEGORY_DOESNT_EXIST_ERROR
+                building_space_doesnt_exists:
+                  description: Espaço de prédio não existente
+                  value:
+                    message: Espaço do prédio não encontrado
+                    code: BUILDING_SPACE_DOESNT_EXIST_ERROR
+                user_account_doesnt_exists:
+                  description: Conta de usuário não existente
+                  value:
+                    message: Conta de usuário não encontrada
+                    code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /lost-items/{item_id}:
+    description: "Esse caminho representa um recurso correspondente a um item perdido, identificado por um ID"
+    get:
+      tags:
+      - Itens Perdidos
+      description: Obtém um item perdido de maneira detalhada
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item perdido a ser obtido
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Item perdido encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetLostItemDetailsResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item perdido não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Itens Perdidos
+      description: Exclui um item perdido
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item perdido a ser excluido
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Item perdido excluido com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item perdido excluido com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item perdido não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Itens Perdidos
+      description: Atualiza os dados de um item perdido
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item perdido a ser atualizado
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLostItemRequest"
+      responses:
+        "200":
+          description: Item perdido atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item perdido atualizado com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item perdido não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /my-lost-items:
+    description: Esse caminho representa uma coleção de recursos correspondentes a itens perdidos de um usuário específcio
+    get:
+      tags:
+      - Itens Perdidos
+      description: Busca todos os itens perdidos associados a um usuário
+      responses:
+        "200":
+          description: Itens perdidos obtidos com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListLostItemsSummaryResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: A conta de usuário não foi encontrada!
+                code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /found-items:
+    description: Esse caminho representa uma coleção de recursos correspondentes a itens encontrados
+    get:
+      tags:
+      - Itens Encontrados
+      description: Busca todos os itens encontrados de forma resumida
+      parameters:
+      - name: limit
+        in: query
+        description: Limite de itens encontrados obtidos
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Itens encontrados encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListFoundItemsSummaryResponse"
+        "400":
+          description: Campo limite negativo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: O campo 'limit' não pode ser negativo!
+                code: NEGATIVE_LIMIT_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Itens Encontrados
+      description: Cria um item encontrado no sistema
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFoundItemRequest"
+      responses:
+        "201":
+          description: Item encontrado cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item encontrado registrado com sucesso!
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                empty_field:
+                  description: Algum campo obrigatório está vazio
+                  value:
+                    message: Campo email está vazio
+                    code: EMPTY_FIELD_ERROR
+                    field: email
+                required_field_missing:
+                  description: Campos obrigatórios não informados
+                  value:
+                    message: Campos obrigatórios não informados
+                    code: REQUIRED_FIELD_MISSING_ERROR
+                category_doesnt_exists:
+                  description: Categoria não existente
+                  value:
+                    message: Categoria não encontrada
+                    code: CATEGORY_DOESNT_EXIST_ERROR
+                building_space_doesnt_exists:
+                  description: Espaço de prédio não existente
+                  value:
+                    message: Espaço do prédio não encontrado
+                    code: BUILDING_SPACE_DOESNT_EXIST_ERROR
+                user_account_doesnt_exists:
+                  description: Conta de usuário não existente
+                  value:
+                    message: Conta de usuário não encontrada
+                    code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /found-items/{item_id}:
+    description: "Esse caminho representa um recurso correspondente a um item encontrado, identificado por um ID"
+    get:
+      tags:
+      - Itens Encontrados
+      description: Obtém um item encontrado de maneira detalhada
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item encontrado a ser obtido
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Item encontrado encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetFoundItemDetailsResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item encontrado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Itens Encontrados
+      description: Exclui um item encontrado
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item encontrado a ser excluido
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Item encontrado excluido com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item encontrado excluido com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item perdido não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Itens Encontrados
+      description: Atualiza os dados de um item encontrado
+      parameters:
+      - name: item_id
+        in: path
+        description: ID do item encontrado a ser atualizado
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateFoundItemRequest"
+      responses:
+        "200":
+          description: Item encontrado atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Item encontrado atualizado com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Item encontrado não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Item não encontrado
+                code: ITEM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /my-found-items:
+    description: Esse caminho representa uma coleção de recursos correspondentes a itens encontrados de um usuário específcio
+    get:
+      tags:
+      - Itens Encontrados
+      description: Busca todos os itens encontrados associados a um usuário
+      responses:
+        "200":
+          description: Itens encontrados obtidos com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListFoundItemsSummaryResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: A conta de usuário não foi encontrada!
+                code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /categories:
+    description: Esse caminho representa uma coleção de recursos correspondentes a categorias de itens
+    get:
+      tags:
+      - Categorias
+      description: Obtém todas as categorias existentes no sistema
+      responses:
+        "200":
+          description: Categorias encontradas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListCategoriesResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /uploads:
+    description: Esse caminho representa o processo de enviar uma imagem ao sistema
+    post:
+      tags:
+      - Imagens
+      description: Armazena uma imagem no sistema
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UploadImageRequest"
+      responses:
+        "201":
+          description: Imagem armazenada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadImageResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /buildings:
+    description: Esse caminho representa uma coleção de recursos correspondente aos prédios do sistema
+    get:
+      tags:
+      - Prédios
+      description: Obtém todos os prédios registrados no sistema
+      responses:
+        "200":
+          description: Prédios obtidos com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListBuildingsResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /buildings/{building_id}/building-spaces:
+    description: "Esse caminho representa uma coleção de recursos correspondentes a espaços de prédios de um prédio específico, identificado por um ID"
+    get:
+      tags:
+      - Espaços de Prédio
+      description: Obtém todos os prédios registrados no sistema
+      parameters:
+      - name: building_id
+        in: path
+        description: ID do prédio cujos espaços do prédio serão obtidos
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Prédios obtidos com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListBuildingSpacesReponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Prédio não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Prédio não encontrado
+                code: BUILDING_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /buildings/{building_id}/coordinates:
+    description: "Esse caminho representa o processo de obter coordenadas de um prédio específico, identificado por um ID"
+    get:
+      tags:
+      - Coordenadas
+      description: Obtém as coordenadas (Longitude e Latitude) de um prédio
+      parameters:
+      - name: building_id
+        in: path
+        description: ID do prédio cujas coordenadas serão obtidas
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Coordenadas obtidas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetBuildingCoordinatesResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Prédio não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Prédio não encontrado
+                code: BUILDING_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /claims:
+    description: Esse caminho representa uma coleção de recursos correspondente as negociações de recuperação de itens
+    post:
+      tags:
+      - Recompensas
+      description: Cria uma negociação de recuperação de item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateClaimRequest"
+      responses:
+        "201":
+          description: Negociação cadastrada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Negociação registrada com sucesso!
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                item_doesnt_exist_error:
+                  description: Item não existente
+                  value:
+                    message: Item não encontrado
+                    code: ITEM_DOESNT_EXIST_ERROR
+                user_account_doesnt_exists:
+                  description: Conta de usuário não existente
+                  value:
+                    message: Conta de usuário não encontrada
+                    code: USER_ACCOUNT_DOESNT_EXIST_ERROR
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /claim/{claim_id}:
+    description: "Esse caminho representa um recurso de negociação de recuperação de item, identificado por um ID"
+    get:
+      tags:
+      - Recompensas
+      description: Obtém uma negociação através do ID
+      parameters:
+      - name: claim_id
+        in: path
+        description: ID da negociação
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Negociação obtida com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetClaimDetailsResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Negociação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Negociação não encontrada
+                code: CLAIM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Recompensas
+      description: Exclui uma negociação através do ID
+      parameters:
+      - name: claim_id
+        in: path
+        description: ID da negociação
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Negociação excluída com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Negociação excluída com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Negociação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Negociação não encontrada
+                code: CLAIM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /claims/{claim_id}/accept:
+    description: "Esse caminho representa o processo de aceitar uma negociação de recuperação de item, através do ID da negociação"
+    patch:
+      tags:
+      - Recompensas
+      description: "Altera o status da negociação de recuperação de item para aceita, e gera um código de recuperação"
+      parameters:
+      - name: claim_id
+        in: path
+        description: ID da negociação
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Negociação obtida com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AcceptClaimResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Negociação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Negociação não encontrada
+                code: CLAIM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /claims/{claim_id}/reject:
+    description: "Esse caminho representa o processo de rejeitar uma negociação de recuperação de item, através do ID da negociação"
+    patch:
+      tags:
+      - Recompensas
+      description: Altera o status da negociação de recuperação de item para rejeitada
+      parameters:
+      - name: claim_id
+        in: path
+        description: ID da negociação
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Negociação rejeitada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Negociação rejeitada com sucesso
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Negociação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Negociação não encontrada
+                code: CLAIM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /claims/{claim_id}/complete-retrieval:
+    description: "Esse caminho representa o processo de completar uma negociação de recuperação de item, através do ID da negociação"
+    patch:
+      tags:
+      - Recompensas
+      description: Altera o status da negociação de recuperação de item para concluída
+      parameters:
+      - name: claim_id
+        in: path
+        description: ID da negociação a ser aceita
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FinishClaimRequest"
+      responses:
+        "200":
+          description: Negociação concluída com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                message: Negociação concluída com sucesso!
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+        "404":
+          description: Negociação não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                message: Negociação não encontrada
+                code: CLAIM_DOESNT_EXIST_ERROR
+      security:
+      - bearerAuth: []
+  /my-created-claims:
+    description: Esse caminho representa o processo de obtenção de negociações criadas por um usuário
+    get:
+      tags:
+      - Recompensas
+      description: Obtém as negociações criadas por um usuário
+      responses:
+        "200":
+          description: Negociações obtidas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListClaimSummaryResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+  /my-received-claims:
+    description: Esse caminho representa o processo de obtenção de negociações recebidas por um usuário
+    get:
+      tags:
+      - Recompensas
+      description: Obtém as negociações recebidas por um usuário
+      responses:
+        "200":
+          description: Negociações obtidas com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ListClaimSummaryResponse"
+        "401":
+          description: Token de acesso inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                expired_signature_error:
+                  description: Token expirado
+                  value:
+                    message: Token expirado
+                    code: EXPIRED_SIGNATURE_ERROR
+                invalid_token_error:
+                  description: Token inválido
+                  value:
+                    message: Token inválido
+                    code: INVALID_TOKEN_ERROR
+                token_not_provided:
+                  description: Token não informado
+                  value:
+                    message: Token de autenticação não informado
+                    code: TOKEN_NOT_PROVIDED
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    RegisterUserRequest:
+      required:
+      - confirm_password
+      - email
+      - name
+      - password
+      - phone
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        email:
+          type: string
+          example: linkthehylian@email.com
+        password:
+          type: string
+          format: password
+          example: ruppees123
+        confirm_password:
+          type: string
+          format: password
+          example: ruppees123
+        phone:
+          type: string
+          example: "12345678"
+    LoginRequest:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          example: linkthehylian@email.com
+        password:
+          type: string
+          format: password
+          example: ruppees123
+    CreateLostItemRequest:
+      required:
+      - category_id
+      - lost_building_space_id
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        image_urls:
+          type: array
+          items:
+            type: string
+            example: /static/master_sword.png
+        category_id:
+          type: integer
+          example: 1
+        lost_building_space_id:
+          type: integer
+          example: 1
+    CreateFoundItemRequest:
+      required:
+      - category_id
+      - found_building_space_id
+      - left_building_space_id
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        image_urls:
+          type: array
+          items:
+            type: string
+            example: /static/master_sword.png
+        category_id:
+          type: integer
+          example: 1
+        found_building_space_id:
+          type: integer
+          example: 1
+        left_building_space_id:
+          type: integer
+          example: 1
+    ListLostItemsSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Master Sword
+        user:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_user"
+        category:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_category"
+        lost_building_space:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_lost_building_space"
+        image:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_image"
+    ListFoundItemsSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Master Sword
+        user:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_user"
+        category:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_category"
+        found_building_space:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_lost_building_space"
+        image:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_image"
+    GetLostItemDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        user:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_user"
+        category:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_category"
+        lost_building_space:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_lost_building_space"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ListLostItemsSummaryResponse_image"
+    GetFoundItemDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        user:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_user"
+        category:
+          $ref: "#/components/schemas/ListLostItemsSummaryResponse_category"
+        found_building_space:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_lost_building_space"
+        left_building_space:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_lost_building_space"
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/ListLostItemsSummaryResponse_image"
+    ListCategoriesResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Acessório Pessoal
+    UploadImageRequest:
+      required:
+      - data
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: master_sword.png
+        data:
+          type: string
+          format: binary
+    UploadImageResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+    ListBuildingsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Lost Woods
+    ListBuildingSpacesReponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Sala 1
+    GetBuildingCoordinatesResponse:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: -15.4
+        longitude:
+          type: number
+          format: float
+          example: -156
+    CreateClaimRequest:
+      type: object
+      properties:
+        found_item_id:
+          type: integer
+          example: 10
+    AcceptClaimResponse:
+      type: object
+      properties:
+        retrieval_code:
+          type: string
+          example: A1B2C3
+    FinishClaimRequest:
+      type: object
+      properties:
+        retrieval_code:
+          type: string
+          example: A1B2C3
+    GetClaimDetailsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        status:
+          $ref: "#/components/schemas/GetClaimDetailsResponse_status"
+        claimant_user_account:
+          $ref: "#/components/schemas/GetClaimDetailsResponse_claimant_user_account"
+        associated_found_item:
+          $ref: "#/components/schemas/GetClaimDetailsResponse_associated_found_item"
+        created_at:
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+    ListClaimSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        associated_found_item:
+          $ref: "#/components/schemas/GetClaimDetailsResponse_associated_found_item"
+    UpdateLostItemRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        category_id:
+          type: integer
+          example: 1
+        lost_building_space_id:
+          type: integer
+          example: 1
+    UpdateFoundItemRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Master Sword
+        description:
+          type: string
+          example: "Espada prateada, com cabo azul e gema amarela"
+        category_id:
+          type: integer
+          example: 1
+        found_building_space_id:
+          type: integer
+          example: 1
+        left_building_space_id:
+          type: integer
+          example: 1
+    GetUserDetailsResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        email:
+          type: string
+          example: linkthehylian@email.com
+        phone:
+          type: string
+          example: "12345678"
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        password:
+          type: string
+          format: password
+          example: ruppees123
+        confirm_password:
+          type: string
+          format: password
+          example: ruppees123
+        phone:
+          type: string
+          example: "12345678"
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+        field:
+          type: string
+          nullable: true
+    inline_response_200:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTQ1MjAwMDAsImV4cCI6MTcxNDUyMzYwMH0.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+    ListLostItemsSummaryResponse_user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+    ListLostItemsSummaryResponse_category:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Acessório Pessoal
+    ListLostItemsSummaryResponse_lost_building_space:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Sala 1
+    ListLostItemsSummaryResponse_image:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: /static/master_sword.png
+    GetLostItemDetailsResponse_user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        email:
+          type: string
+          example: linkthehylian@email.com
+        phone:
+          type: string
+          example: "12345678"
+    GetLostItemDetailsResponse_lost_building_space_building_localization:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: "12345678"
+        neighborhood:
+          type: string
+          example: Kokiri Village
+        street:
+          type: string
+          example: Hyrule
+    GetLostItemDetailsResponse_lost_building_space_building:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Lost Woods
+        localization:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_lost_building_space_building_localization"
+    GetLostItemDetailsResponse_lost_building_space:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Sala 1
+        building:
+          $ref: "#/components/schemas/GetLostItemDetailsResponse_lost_building_space_building"
+    GetClaimDetailsResponse_status:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Pendente
+    GetClaimDetailsResponse_claimant_user_account:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        phone:
+          type: string
+          example: "12345678"
+    GetClaimDetailsResponse_associated_found_item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Master Sword
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
