@@ -1,8 +1,12 @@
 from backend.app.application.use_cases.get_claim_details_use_case import GetClaimDetailsUseCase
 from backend.app.application.use_cases.delete_claim_use_case import DeleteClaimUseCase
+from backend.app.application.use_cases.create_claim_use_case import CreateClaimUseCase
 from backend.app.infrastructure.persistence.repositories.claim_repository import ClaimRepository
+from backend.app.infrastructure.persistence.repositories.found_item_repository import FoundItemRepository
+from backend.app.infrastructure.persistence.repositories.user_account_repository import UserAccountRepository
 from backend.app.presentation.controllers.get_claim_details_controller import GetClaimDetailsController
 from backend.app.presentation.controllers.delete_claim_controller import DeleteClaimController
+from backend.app.presentation.controllers.create_claim_controller import CreateClaimController
 from sqlalchemy.orm import Session
 
 
@@ -48,3 +52,32 @@ def make_delete_claim_controller(session: Session) -> DeleteClaimController:
     use_case = DeleteClaimUseCase(repository)
 
     return DeleteClaimController(use_case)
+
+
+def make_create_claim_controller(session: Session) -> CreateClaimController:
+
+    """Factory function que cria um objeto CreateClaimController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    CreateClaimController
+        Ponto de acesso entre o endpoint e o caso de uso de criar uma negociação de recuperação de item
+
+    """
+
+    user_account_repository = UserAccountRepository(session)
+    found_item_repository = FoundItemRepository(session)
+    claim_repository = ClaimRepository(session)
+
+    use_case = CreateClaimUseCase(
+        claim_repository,
+        found_item_repository,
+        user_account_repository,
+    )
+
+    return CreateClaimController(use_case)

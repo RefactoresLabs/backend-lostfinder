@@ -8,8 +8,8 @@ from backend.app.presentation.routers.found_item_routes import create_found_item
 from backend.app.presentation.routers.category_routes import create_category_routes
 from backend.app.presentation.routers.building_routes import create_building_routes
 from backend.app.presentation.routers.building_space_routes import create_building_space_routes
-from backend.app.presentation.routers.claim_routes import create_claim_routes
 from backend.app.presentation.routers.upload_routes import create_upload_routes
+from backend.app.presentation.routers.claim_routes import create_claim_routes
 
 def create_app() -> Flask:
 
@@ -34,5 +34,4 @@ def create_app() -> Flask:
     create_building_routes(app) # Rotas de prédios
     create_building_space_routes(app) # Rotas de espaços de prédio
     create_claim_routes(app) # Rotas de negociações de recuperação
-    
     return app
