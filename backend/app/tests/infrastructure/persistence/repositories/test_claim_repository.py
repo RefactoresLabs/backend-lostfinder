@@ -141,6 +141,7 @@ def seed_data(session: Session) -> None:
         claimant_user_account_id=2,
         associated_found_item_id=1,
         status_id=1,
+        retrieval_code="12A34B56C7",
     )
 
     session.add_all([
@@ -240,7 +241,7 @@ def test_get_claim_by_id_success(session, seed_data):
     claim = repo.get_claim_by_id(1)
 
     assert claim.id == 1
-    assert claim.retrieval_code == None
+    assert claim.retrieval_code == "12A34B56C7"
     assert claim.status.name == "Pendente"
     assert claim.associated_found_item.associated_user_account.name == "Link"
     assert claim.claimant_user_account.name == "Mario"
@@ -283,6 +284,13 @@ def test_delete_claim_id_doesnt_exist(session, seed_data):
 
     assert not removed
 
+def test_check_retrieval_code_exists(session, seed_data):
+
+    repo = ClaimRepository(session)
+
+    exists = repo.check_retrieval_code_exists("12A34B56C7")
+
+    assert exists
     
     
     
