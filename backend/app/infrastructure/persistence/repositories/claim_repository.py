@@ -342,3 +342,27 @@ class ClaimRepository(ClaimRepositoryInterface):
         )
 
         return rows_removed > 0
+    
+    def check_retrieval_code_exists(self, retrieval_code: str) -> bool:
+
+        """Verifica se existe uma instância associada a tabela claim com o código de recuperação passado
+
+        Parameters
+        ----------
+        retrieval_code: str
+            Código de recuperação a ser verificado
+        
+        Returns
+        -------
+        bool
+            Retorna True, se o código já existir. Caso contrário, retorna False
+
+        """
+
+        claim_model = self.__session.query(
+            ClaimModel
+        ).filter(
+            ClaimModel.retrieval_code == retrieval_code
+        ).first()
+
+        return claim_model is not None
