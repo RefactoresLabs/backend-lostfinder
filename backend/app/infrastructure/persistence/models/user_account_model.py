@@ -14,6 +14,7 @@ class UserAccountModel(Base):
     email = mapped_column(String(255), nullable=False, unique=True)
     password = mapped_column(String(255), nullable=False)
     phone = mapped_column(String(20), nullable=False)
+    score = mapped_column(Integer, nullable=False, default=0)
 
     def __repr__(self) -> str:
 
