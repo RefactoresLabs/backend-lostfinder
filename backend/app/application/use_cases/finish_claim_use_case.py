@@ -1,6 +1,8 @@
 from backend.app.domain.repositories.claim_repository_interface import ClaimRepositoryInterface
+from backend.app.domain.repositories.user_account_repository_interface import UserAccountRepositoryInterface
 
 from backend.app.domain.entities.claim import Claim
+from backend.app.domain.entities.user_account import UserAccount
 from backend.app.domain.value_objects.claim_status import ClaimStatus
 
 from backend.app.domain.exceptions.claim_doesnt_exist_error import ClaimDoesntExistError
@@ -15,7 +17,7 @@ class FinishClaimUseCase:
 
     """Representa um caso de uso de finalizar uma negociação de recuperação de item"""
 
-    def __init__(self, claim_repository: ClaimRepositoryInterface):
+    def __init__(self, claim_repository: ClaimRepositoryInterface, user_account_repository: UserAccountRepositoryInterface):
 
         """Inicializa os atributos de instância de FinishClaimUseCase
 
@@ -24,9 +26,13 @@ class FinishClaimUseCase:
         claim_repository: ClaimRepositoryInterface
             Repositório de negociação de recuperação de item para busca de dados
         
+        user_account_repository: UserAccountRepositoryInterface
+            Repositório de conta de usuário para atualização de dados
+        
         """
 
-        self.__repository = claim_repository
+        self.__claim_repository = claim_repository
+        self.__user_account_repository = user_account_repository
     
     def execute(self, dto: FinishClaimDTO) -> None:
 
@@ -50,10 +56,10 @@ class FinishClaimUseCase:
 
         RetrievalCodeMismatchError
             Exceção levantada caso o código passado não corresponda ao código da negociação
-            
+
         """
 
-        claim = self.__repository.get_claim_by_id(dto.claim_id)
+        claim = self.__claim_repository.get_claim_by_id(dto.claim_id)
 
         if not claim:
 
@@ -80,5 +86,28 @@ class FinishClaimUseCase:
             retrieval_code=claim.retrieval_code,
         )
 
-        _ = self.__repository.update_claim(new_claim, dto.claim_id)
+        _ = self.__claim_repository.update_claim(new_claim, dto.claim_id)
+
+        new_found_item_user_account = UserAccount(
+            id=claim.associated_found_item.associated_user_account.id,
+            name=claim.associated_found_item.associated_user_account.name,
+            email=claim.associated_found_item.associated_user_account.email,
+            password=claim.associated_found_item.associated_user_account.password,
+            phone=claim.associated_found_item.associated_user_account.phone,
+            score=50,
+        )
+
+        new_claimant_user_account = UserAccount(
+            id=claim.claimant_user_account.id,
+            name=claim.claimant_user_account.name,
+            email=claim.claimant_user_account.email,
+            password=claim.claimant_user_account.password,
+            phone=claim.claimant_user_account.phone,
+            score=20,
+        )
+
+        _ = self.__user_account_repository.update_user_account(new_found_item_user_account, new_found_item_user_account.id)
+        _ = self.__user_account_repository.update_user_account(new_claimant_user_account, new_claimant_user_account.id)
+
+
 
