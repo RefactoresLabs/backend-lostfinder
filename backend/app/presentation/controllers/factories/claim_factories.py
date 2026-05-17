@@ -2,6 +2,7 @@ from backend.app.application.use_cases.get_claim_details_use_case import GetClai
 from backend.app.application.use_cases.delete_claim_use_case import DeleteClaimUseCase
 from backend.app.application.use_cases.create_claim_use_case import CreateClaimUseCase
 from backend.app.application.use_cases.accept_claim_use_case import AcceptClaimUseCase
+from backend.app.application.use_cases.finish_claim_use_case import FinishClaimUseCase
 
 from backend.app.infrastructure.persistence.repositories.claim_repository import ClaimRepository
 from backend.app.infrastructure.persistence.repositories.found_item_repository import FoundItemRepository
@@ -11,6 +12,7 @@ from backend.app.presentation.controllers.get_claim_details_controller import Ge
 from backend.app.presentation.controllers.delete_claim_controller import DeleteClaimController
 from backend.app.presentation.controllers.create_claim_controller import CreateClaimController
 from backend.app.presentation.controllers.accept_claim_controller import AcceptClaimController
+from backend.app.presentation.controllers.finish_claim_controller import FinishClaimController
 
 
 from sqlalchemy.orm import Session
@@ -109,3 +111,25 @@ def make_accept_claim_controller(session: Session) -> AcceptClaimController:
     use_case = AcceptClaimUseCase(repository)
 
     return AcceptClaimController(use_case)
+
+def make_finish_claim_controller(session: Session) -> FinishClaimController:
+
+    """Function factory que cria um objeto FinishClaimController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações do banco
+
+    Returns
+    -------
+    FinishClaimController
+        Ponto de acesso entre o endpoint e o caso de uso de finalizar uma negociação de recuperação de item
+
+    """
+
+    repository = ClaimRepository(session)
+
+    use_case = FinishClaimUseCase(repository)
+
+    return FinishClaimController(use_case)
