@@ -11,7 +11,9 @@ from backend.app.presentation.controllers.factories.lost_item_factories import (
         make_list_lost_item_summarized_controller,
         make_create_lost_item_controller,
         make_get_lost_item_details_controller,
-        make_list_user_account_lost_item_summarized_controller
+        make_list_user_account_lost_item_summarized_controller,
+        make_update_lost_item_controller,
+        make_delete_lost_item_controller,
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -124,6 +126,69 @@ def create_lost_item_routes(app: Flask) -> None:
             )
 
             http_response = get_lost_item_details_controller.handle(http_request)
+
+            return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/lost-items/<int:item_id>", methods=["PATCH"])
+    @jwt_required
+    def update_lost_item(item_id: int):
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "item_id": item_id,
+                },
+                body=request.get_json(),
+            )
+
+            update_lost_item_controller = make_update_lost_item_controller(
+                session_manager.session,
+            )
+
+            http_response = update_lost_item_controller.handle(http_request)
+
+            return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/lost-items/<int:item_id>", methods=["DELETE"])
+    @jwt_required
+    def delete_lost_item(item_id: int):
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "item_id": item_id,
+                },
+            )
+
+            delete_lost_item_controller = make_delete_lost_item_controller(
+                session_manager.session,
+            )
+
+            http_response = delete_lost_item_controller.handle(http_request)
 
             return jsonify(http_response.body), http_response.status_code
     
