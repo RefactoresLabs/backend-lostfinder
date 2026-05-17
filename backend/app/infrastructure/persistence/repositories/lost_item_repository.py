@@ -228,6 +228,7 @@ class LostItemRepository(LostItemRepositoryInterface):
             email=user_account_model.email,
             password=user_account_model.password,
             phone=user_account_model.phone,
+            score=user_account_model.score,
         )
 
         return LostItem(
