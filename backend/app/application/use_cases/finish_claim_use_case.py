@@ -48,6 +48,9 @@ class FinishClaimUseCase:
         CurrentClaimStatusError
             Exceção levantada caso o status de negociação atual não seja Aceita   
 
+        RetrievalCodeMismatchError
+            Exceção levantada caso o código passado não corresponda ao código da negociação
+            
         """
 
         claim = self.__repository.get_claim_by_id(dto.claim_id)
