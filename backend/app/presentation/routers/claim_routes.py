@@ -11,6 +11,7 @@ from backend.app.presentation.controllers.factories.claim_factories import (
     make_get_claim_details_controller,
     make_delete_claim_controller,
     make_accept_claim_controller,
+    make_finish_claim_controller,
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -144,5 +145,38 @@ def create_claim_routes(app: Flask) -> None:
             )
 
             http_response = accept_claim_controller.handle(http_request)
+
+        return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/claims/<int:claim_id>/complete-retrieval", methods=["PATCH"])
+    @jwt_required
+    def finish_claim(claim_id: int):
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "claim_id": claim_id,
+                    "user_id": request.payload["user_id"]
+                },
+                body=request.json(),
+            )
+
+            finish_claim_controller = make_finish_claim_controller(
+                session_manager.session,
+            )
+
+            http_response = finish_claim_controller.handle(http_request)
 
         return jsonify(http_response.body), http_response.status_code
