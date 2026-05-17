@@ -278,7 +278,8 @@ class ClaimRepository(ClaimRepositoryInterface):
             name=found_item_user_account_model.name,
             email=found_item_user_account_model.email,
             password=found_item_user_account_model.password,
-            phone=found_item_user_account_model.phone
+            phone=found_item_user_account_model.phone,
+            score=found_item_user_account_model.score
         )
 
         found_item = FoundItem(
@@ -304,6 +305,7 @@ class ClaimRepository(ClaimRepositoryInterface):
             email=claimant_user_account_model.email,
             password=claimant_user_account_model.password,
             phone=claimant_user_account_model.phone,
+            score=claimant_user_account_model.score
         )
 
         status = ClaimStatus(name=claim_status_model.name)
