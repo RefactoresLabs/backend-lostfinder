@@ -1398,6 +1398,23 @@ paths:
                 $ref: "#/components/schemas/SuccessResponse"
               example:
                 message: Negociação rejeitada com sucesso
+        "400":
+          description: Erro de validação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                user_account_doesnt_have_permission_error:
+                  description: Conta de usuário não tem permissão para realizar a operação
+                  value:
+                    message: "Usuário não tem permissão para essa operação"
+                    code: "USER_ACCOUNT_DOESNT_HAVE_PERMISSION_ERROR"
+                current_claim_status_error:
+                  description: Status de negociação desejado não é válido por conta do status atual
+                  value:
+                    message: "Uma negociação que não tenha status 'Pendente' não pode ser rejeitada"
+                    code: "CURRENT_CLAIM_STATUS_ERROR"
         "401":
           description: Token de acesso inválido ou expirado
           content:
