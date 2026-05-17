@@ -3,6 +3,7 @@ from backend.app.application.use_cases.delete_claim_use_case import DeleteClaimU
 from backend.app.application.use_cases.create_claim_use_case import CreateClaimUseCase
 from backend.app.application.use_cases.accept_claim_use_case import AcceptClaimUseCase
 from backend.app.application.use_cases.finish_claim_use_case import FinishClaimUseCase
+from backend.app.application.use_cases.reject_claim_use_case import RejectClaimUseCase
 
 from backend.app.infrastructure.persistence.repositories.claim_repository import ClaimRepository
 from backend.app.infrastructure.persistence.repositories.found_item_repository import FoundItemRepository
@@ -13,6 +14,7 @@ from backend.app.presentation.controllers.delete_claim_controller import DeleteC
 from backend.app.presentation.controllers.create_claim_controller import CreateClaimController
 from backend.app.presentation.controllers.accept_claim_controller import AcceptClaimController
 from backend.app.presentation.controllers.finish_claim_controller import FinishClaimController
+from backend.app.presentation.controllers.reject_claim_controller import RejectClaimController
 
 
 from sqlalchemy.orm import Session
@@ -133,3 +135,25 @@ def make_finish_claim_controller(session: Session) -> FinishClaimController:
     use_case = FinishClaimUseCase(repository)
 
     return FinishClaimController(use_case)
+
+def make_reject_claim_controller(session: Session) -> RejectClaimController:
+
+    """Factory function que cria um objeto RejectClaimController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    RejectClaimController
+        Ponto de acesso entre o endpoint e o caso de uso de rejeitar uma negociação de recuperação de item
+
+    """
+
+    repository = ClaimRepository(session)
+
+    use_case = RejectClaimUseCase(repository)
+
+    return RejectClaimController(use_case)
