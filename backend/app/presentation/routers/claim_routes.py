@@ -4,11 +4,13 @@ import os
 
 from backend.app.infrastructure.database.database_url_builder import DatabaseURLBuilder
 from backend.app.infrastructure.database.session_manager import SessionManager
+
 from backend.app.presentation.schemas.http_request import HttpRequest
 from backend.app.presentation.controllers.factories.claim_factories import (
     make_create_claim_controller,
     make_get_claim_details_controller,
     make_delete_claim_controller,
+    make_accept_claim_controller,
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -110,5 +112,37 @@ def create_claim_routes(app: Flask) -> None:
             )
 
             http_response = delete_claim_controller.handle(http_request)
+
+        return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/claims/<int:claim_id>/accept", methods=["PATCH"])
+    @jwt_required
+    def accept_claim(claim_id: int):
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "claim_id": claim_id,
+                    "user_id": request.payload["user_id"]
+                },
+            )
+
+            accept_claim_controller = make_accept_claim_controller(
+                session_manager.session,
+            )
+
+            http_response = accept_claim_controller.handle(http_request)
 
         return jsonify(http_response.body), http_response.status_code
