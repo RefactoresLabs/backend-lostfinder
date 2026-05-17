@@ -1900,30 +1900,36 @@ components:
       properties:
         name:
           type: string
-          example: Link
+          example: "Link"
         email:
           type: string
-          example: linkthehylian@email.com
+          example: "linkthehylian@email.com"
         phone:
           type: string
           example: "12345678"
+        score:
+          type: integer
+          example: 10
     UpdateUserRequest:
       type: object
       properties:
         name:
           type: string
-          example: Link
+          example: "Link"
         password:
           type: string
           format: password
-          example: ruppees123
+          example: "ruppees123"
         confirm_password:
           type: string
           format: password
-          example: ruppees123
+          example: "ruppees123"
         phone:
           type: string
           example: "12345678"
+        score:
+          type: integer
+          example: 10
     SuccessResponse:
       type: object
       properties:
