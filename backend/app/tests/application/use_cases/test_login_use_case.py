@@ -20,6 +20,7 @@ def test_login_success():
         password="hashed_password",
         phone="12345678",
         id=1,
+        score=20
     )
 
     fake_hasher.verify.return_value = True

@@ -76,7 +76,8 @@ def seed_data(session: Session) -> None:
         name="Link",
         email="link@email.com",
         password="1234",
-        phone="12345678"
+        phone="12345678",
+        score=20,
     )
 
     claimant_user_account_model = UserAccountModel(
@@ -84,7 +85,8 @@ def seed_data(session: Session) -> None:
         name="Mario",
         email="mario@email.com",
         password="1234",
-        phone="12345678"
+        phone="12345678",
+        score=30,
     )
 
     category_model = CategoryModel(
@@ -189,6 +191,7 @@ def test_create_claim_success(session, seed_data):
         email="link@email.com",
         password="1234",
         phone="12345678",
+        score=20,
     )
 
     category = Category(
@@ -213,6 +216,7 @@ def test_create_claim_success(session, seed_data):
         email="mario@email.com",
         password="1234",
         phone="12345678",
+        score=30,
     )
 
     status = ClaimStatus(

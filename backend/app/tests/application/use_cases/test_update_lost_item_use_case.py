@@ -23,7 +23,7 @@ def test_update_lost_item_use_case_success():
     localization = Localization(cep="123", neighborhood="Bairro", street="Rua")
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = LostItem(
         id=1,
@@ -94,7 +94,7 @@ def test_update_lost_item_use_case_category_not_found():
     localization = Localization(cep="123", neighborhood="Bairro", street="Rua")
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = LostItem(
         id=1,
@@ -137,7 +137,7 @@ def test_update_lost_item_use_case_building_space_not_found():
     localization = Localization(cep="123", neighborhood="Bairro", street="Rua")
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = LostItem(
         id=1,

@@ -24,7 +24,7 @@ def test_update_found_item_use_case_success():
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     found_space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
     left_space = BuildingSpace(id=2, name="Sala 102", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = FoundItem(
         id=1,
@@ -99,7 +99,7 @@ def test_update_found_item_use_case_category_not_found():
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     found_space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
     left_space = BuildingSpace(id=2, name="Sala 102", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = FoundItem(
         id=1,
@@ -145,7 +145,7 @@ def test_update_found_item_use_case_found_building_space_not_found():
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     found_space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
     left_space = BuildingSpace(id=2, name="Sala 102", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = FoundItem(
         id=1,
@@ -192,7 +192,7 @@ def test_update_found_item_use_case_left_building_space_not_found():
     building = Building(id=1, name="Prédio A", associated_localization=localization)
     found_space = BuildingSpace(id=1, name="Sala 101", associated_building=building)
     left_space = BuildingSpace(id=2, name="Sala 102", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     existing_item = FoundItem(
         id=1,

@@ -41,6 +41,7 @@ def test_create_claim_use_case_success():
         email="link@email.com",
         password="1234",
         phone="12345678",
+        score=20,
     )
 
     category = Category(
@@ -65,6 +66,7 @@ def test_create_claim_use_case_success():
         email="mario@email.com",
         password="1234",
         phone="12345678",
+        score=30,
     )
 
     user_account_repo.get_user_account_by_id.return_value = claimant_user_account
