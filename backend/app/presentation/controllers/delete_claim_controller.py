@@ -1,5 +1,6 @@
 from backend.app.domain.exceptions.claim_doesnt_exist_error import ClaimDoesntExistError
 from backend.app.application.use_cases.delete_claim_use_case import DeleteClaimUseCase
+from backend.app.application.dtos.delete_claim_dto import DeleteClaimDTO
 from backend.app.presentation.schemas.http_request import HttpRequest
 from backend.app.presentation.schemas.http_response import HttpResponse
 
@@ -39,8 +40,10 @@ class DeleteClaimController:
 
         claim_id = http_request.params["claim_id"]
 
+        dto = DeleteClaimDTO(claim_id)
+
         try:
-            self.__use_case.execute(claim_id)
+            self.__use_case.execute(dto)
 
             return HttpResponse(
                 status_code=200,

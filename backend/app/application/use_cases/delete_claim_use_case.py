@@ -1,5 +1,6 @@
 from backend.app.domain.repositories.claim_repository_interface import ClaimRepositoryInterface
 from backend.app.domain.exceptions.claim_doesnt_exist_error import ClaimDoesntExistError
+from backend.app.application.dtos.delete_claim_dto import DeleteClaimDTO
 
 
 class DeleteClaimUseCase:
@@ -19,14 +20,14 @@ class DeleteClaimUseCase:
 
         self.__repository = repository
 
-    def execute(self, claim_id: int) -> bool:
+    def execute(self, dto: DeleteClaimDTO) -> bool:
 
         """Executa o fluxo de eventos do caso de uso de excluir uma negociação
 
         Parameters
         ----------
-        claim_id: int
-            ID da negociação a ser excluída
+        dto: DeleteClaimDTO
+            DTO contendo o ID da negociação a ser excluída
         
         Returns
         -------
@@ -40,7 +41,7 @@ class DeleteClaimUseCase:
             
         """
 
-        deleted = self.__repository.delete_claim(claim_id)
+        deleted = self.__repository.delete_claim(dto.claim_id)
 
         if not deleted:
             raise ClaimDoesntExistError("Negociação não encontrada")
