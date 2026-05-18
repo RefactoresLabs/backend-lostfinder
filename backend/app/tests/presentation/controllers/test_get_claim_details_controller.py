@@ -17,6 +17,8 @@ def test_get_claim_details_controller_success():
         claimant_user_phone="12345678",
         associated_found_item_id=10,
         associated_found_item_name="Master Sword",
+        associated_found_item_user_name="Mario",
+        associated_found_item_user_phone="87654321",
         created_at="2026-05-16T12:00:00Z",
         retrieval_code=""
     )
@@ -31,6 +33,7 @@ def test_get_claim_details_controller_success():
     assert http_response.body["id"] == 1
     assert http_response.body["status"]["name"] == "Pendente"
     assert http_response.body["associated_found_item"]["name"] == "Master Sword"
+    assert http_response.body["associated_found_item"]["user"]["name"] == "Mario"
     assert http_response.body["retrieval_code"] == ""
 
 
