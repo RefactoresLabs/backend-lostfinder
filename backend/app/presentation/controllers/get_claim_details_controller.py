@@ -59,6 +59,10 @@ class GetClaimDetailsController:
                     "associated_found_item": {
                         "id": output_dto.associated_found_item_id,
                         "name": output_dto.associated_found_item_name,
+                        "user": {
+                            "name": output_dto.associated_found_item_user_name,
+                            "phone": output_dto.associated_found_item_user_phone,
+                        }
                     },
                     "created_at": output_dto.created_at,
                     "retrieval_code": output_dto.retrieval_code,
