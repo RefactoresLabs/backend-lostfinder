@@ -137,7 +137,7 @@ def create_claim_routes(app: Flask) -> None:
             http_request = HttpRequest(
                 params={
                     "claim_id": claim_id,
-                    "user_id": request.payload["user_id"]
+                    "user_id": request.user_payload["user_id"]
                 },
             )
 
@@ -169,7 +169,7 @@ def create_claim_routes(app: Flask) -> None:
             http_request = HttpRequest(
                 params={
                     "claim_id": claim_id,
-                    "user_id": request.payload["user_id"]
+                    "user_id": request.user_payload["user_id"]
                 },
                 body=request.json(),
             )
@@ -202,7 +202,7 @@ def create_claim_routes(app: Flask) -> None:
             http_request = HttpRequest(
                 params={
                     "claim_id": claim_id,
-                    "user_id": request.payload["user_id"]
+                    "user_id": request.user_payload["user_id"]
                 },
             )
 
