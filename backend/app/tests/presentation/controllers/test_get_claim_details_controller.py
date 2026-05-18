@@ -18,6 +18,7 @@ def test_get_claim_details_controller_success():
         associated_found_item_id=10,
         associated_found_item_name="Master Sword",
         created_at="2026-05-16T12:00:00Z",
+        retrieval_code=""
     )
 
     controller = GetClaimDetailsController(use_case)
@@ -30,6 +31,7 @@ def test_get_claim_details_controller_success():
     assert http_response.body["id"] == 1
     assert http_response.body["status"]["name"] == "Pendente"
     assert http_response.body["associated_found_item"]["name"] == "Master Sword"
+    assert http_response.body["retrieval_code"] == ""
 
 
 def test_get_claim_details_controller_when_id_not_exists():
