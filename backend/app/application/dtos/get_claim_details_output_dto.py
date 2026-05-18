@@ -11,6 +11,7 @@ class GetClaimDetailsOutputDTO:
         associated_found_item_id: int,
         associated_found_item_name: str,
         created_at: str,
+        retrieval_code: str
     ) -> None:
 
         """Inicializa os atributos de instância de GetClaimDetailsOutputDTO
@@ -37,6 +38,9 @@ class GetClaimDetailsOutputDTO:
         
         created_at: str
             Data e hora em que a negociação foi criada
+        
+        retrieval_code: str
+            Código de recuperação da negociação
 
         """
 
@@ -47,6 +51,7 @@ class GetClaimDetailsOutputDTO:
         self.__associated_found_item_id = associated_found_item_id
         self.__associated_found_item_name = associated_found_item_name
         self.__created_at = created_at
+        self.__retrieval_code = retrieval_code
 
     @property
     def claim_id(self) -> int:
@@ -145,3 +150,17 @@ class GetClaimDetailsOutputDTO:
         """
 
         return self.__created_at
+    
+    @property
+    def retrieval_code(self) -> str:
+
+        """Obtém o código de recuperação da negociação
+
+        Returns
+        -------
+        str
+            Código de recuperação da negociação
+
+        """
+
+        return self.__retrieval_code
