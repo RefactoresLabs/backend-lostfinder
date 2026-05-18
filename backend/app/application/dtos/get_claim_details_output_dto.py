@@ -10,6 +10,8 @@ class GetClaimDetailsOutputDTO:
         claimant_user_phone: str,
         associated_found_item_id: int,
         associated_found_item_name: str,
+        associated_found_item_user_name: str,
+        associated_found_item_user_phone: str,
         created_at: str,
         retrieval_code: str
     ) -> None:
@@ -36,6 +38,12 @@ class GetClaimDetailsOutputDTO:
         associated_found_item_name: str
             Nome do item encontrado associado à negociação
         
+        associated_found_item_user_name: str
+            Nome do usuário que cadastrou o item encontrado associado à negociação
+        
+        associated_found_item_user_phone: str
+            Telefone do usuário que cadastrou o item encontrado associado à negociação
+        
         created_at: str
             Data e hora em que a negociação foi criada
         
@@ -50,6 +58,8 @@ class GetClaimDetailsOutputDTO:
         self.__claimant_user_phone = claimant_user_phone
         self.__associated_found_item_id = associated_found_item_id
         self.__associated_found_item_name = associated_found_item_name
+        self.__associated_found_item_user_name = associated_found_item_user_name
+        self.__associated_found_item_user_phone = associated_found_item_user_phone
         self.__created_at = created_at
         self.__retrieval_code = retrieval_code
 
@@ -136,6 +146,34 @@ class GetClaimDetailsOutputDTO:
         """
 
         return self.__associated_found_item_name
+    
+    @property
+    def associated_found_item_user_name(self) -> str:
+
+        """Obtém o nome do usuário que cadastrou o item encontrado associado à negociação
+
+        Returns
+        -------
+        str
+            Nome do usuário que cadastrou o item encontrado associado à negociação 
+        
+        """
+
+        return self.__associated_found_item_user_name
+    
+    @property
+    def associated_found_item_user_phone(self) -> str:
+
+        """Obtém o telefone do usuário que cadastrou o item encontrado associado à negociação
+
+        Returns
+        -------
+        str
+            Telefone do usuário que cadastrou o item encontrado associado à negociação 
+        
+        """
+
+        return self.__associated_found_item_user_phone
 
     @property
     def created_at(self) -> str:
