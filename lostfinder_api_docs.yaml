@@ -1200,7 +1200,7 @@ paths:
                     code: TOKEN_NOT_PROVIDED
       security:
       - bearerAuth: []
-  /claim/{claim_id}:
+  /claims/{claim_id}:
     description: "Esse caminho representa um recurso de negociação de recuperação de item, identificado por um ID"
     get:
       tags:
@@ -1544,7 +1544,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ListClaimSummaryResponse"
+                  $ref: "#/components/schemas/ListCreatedClaimsSummaryResponse"
         "401":
           description: Token de acesso inválido ou expirado
           content:
@@ -1583,7 +1583,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ListClaimSummaryResponse"
+                  $ref: "#/components/schemas/ListReceivedClaimsSummaryResponse"
         "401":
           description: Token de acesso inválido ou expirado
           content:
@@ -1848,13 +1848,13 @@ components:
       properties:
         retrieval_code:
           type: string
-          example: A1B2C3
+          example: "12A34B56C7"
     FinishClaimRequest:
       type: object
       properties:
         retrieval_code:
           type: string
-          example: A1B2C3
+          example: "12A34B56C7"
     GetClaimDetailsResponse:
       type: object
       properties:
@@ -1871,14 +1871,27 @@ components:
           type: string
           format: date-time
           example: 2017-07-21T17:32:28Z
-    ListClaimSummaryResponse:
+        retrieval_code:
+          type: string
+          example: "12A34B56C7"
+    ListCreatedClaimsSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        claimant_user_account:
+          $ref: "#/components/schemas/ListCreatedClaimsSummaryResponse_claimant_user_account"
+        associated_found_item:
+          $ref: "#/components/schemas/ListCreatedClaimsSummaryResponse_associated_found_item"
+    ListReceivedClaimsSummaryResponse:
       type: object
       properties:
         id:
           type: integer
           example: 1
         associated_found_item:
-          $ref: "#/components/schemas/GetClaimDetailsResponse_associated_found_item"
+          $ref: "#/components/schemas/ListReceivedClaimsSummaryResponse_associated_found_item"
     UpdateLostItemRequest:
       type: object
       properties:
@@ -2057,6 +2070,43 @@ components:
         name:
           type: string
           example: Master Sword
+        user:
+          $ref: "#/components/schemas/GetClaimDetailsResponse_associated_found_item_user"     
+    GetClaimDetailsResponse_associated_found_item_user:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Link
+        phone:
+          type: string
+          example: "12345678"
+    ListCreatedClaimsSummaryResponse_claimant_user_account:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Link"
+    ListCreatedClaimsSummaryResponse_associated_found_item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Master Sword"
+    ListReceivedClaimsSummaryResponse_associated_found_item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Master Sword"
+        user:
+          $ref: "#/components/schemas/ListCreatedClaimsSummaryResponse_claimant_user_account"
   securitySchemes:
     bearerAuth:
       type: http
