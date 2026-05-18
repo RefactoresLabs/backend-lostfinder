@@ -54,6 +54,8 @@ class GetClaimDetailsUseCase:
             claim.claimant_user_account.phone,
             claim.associated_found_item.id,
             claim.associated_found_item.name,
+            claim.associated_found_item.associated_user_account.name,
+            claim.associated_found_item.associated_user_account.phone,
             claim.created_at.isoformat(),
             claim.retrieval_code if claim.retrieval_code else ""
         )
