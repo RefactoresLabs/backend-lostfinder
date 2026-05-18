@@ -60,7 +60,7 @@ class CreateClaimUseCase:
         
         """
 
-        found_item = self.__found_item_repository(dto.found_item_id)
+        found_item = self.__found_item_repository.get_found_item_by_id(dto.found_item_id)
 
         if not found_item:
 
