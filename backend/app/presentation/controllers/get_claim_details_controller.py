@@ -61,6 +61,7 @@ class GetClaimDetailsController:
                         "name": output_dto.associated_found_item_name,
                     },
                     "created_at": output_dto.created_at,
+                    "retrieval_code": output_dto.retrieval_code,
                 },
             )
 
