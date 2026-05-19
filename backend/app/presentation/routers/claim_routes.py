@@ -216,7 +216,7 @@ def create_claim_routes(app: Flask) -> None:
 
         return jsonify(http_response.body), http_response.status_code
 
-    @app.route("/claims/my-created-claims", methods=["GET"])
+    @app.route("/my-created-claims", methods=["GET"])
     @jwt_required
     def list_my_created_claims():
 
@@ -244,7 +244,7 @@ def create_claim_routes(app: Flask) -> None:
 
         return jsonify(http_response.body), http_response.status_code
 
-    @app.route("/claims/my-received-claims", methods=["GET"])
+    @app.route("/my-received-claims", methods=["GET"])
     @jwt_required
     def list_my_received_claims():
 
