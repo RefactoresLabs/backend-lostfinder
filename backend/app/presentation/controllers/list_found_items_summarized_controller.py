@@ -43,8 +43,8 @@ class ListFoundItemsSummarizedController:
 
         name = http_request.params.get("name")
         category_id = http_request.params.get("category_id")
-        sort_by = http_request.params.get("sort_by", "name")
-        sort_option = http_request.params.get("sort_option", "asc")
+        sort_by = http_request.params["sort_by"] if http_request.params["sort_by"] is not None else "name"
+        sort_option = http_request.params["sort_option"] if http_request.params["sort_option"] is not None else "asc"
 
         dto = ListItemsSummarizedInputDTO(
             name,
