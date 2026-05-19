@@ -45,7 +45,7 @@ class UpdateFoundItemController:
         body = http_request.body
         item_id = http_request.params["item_id"]
 
-        required_fields = ["name", "description", "category_id", "found_building_space_id", "left_building_space_id"]
+        required_fields = ("name", "description", "category_id", "found_building_space_id", "left_building_space_id")
 
         if not all([field in body.keys() for field in required_fields]):
 

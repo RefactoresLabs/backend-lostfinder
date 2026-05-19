@@ -32,13 +32,13 @@ class DatabaseURLBuilder:
             
             return f"{driver}:///{database}"
         
-        required_fields = [
+        required_fields = (
             "USERNAME", 
             "PASSWORD", 
             "HOSTNAME", 
             "DATABASE_PORT", 
             "DATABASE"
-        ]
+        )
 
         for field in required_fields:
 
