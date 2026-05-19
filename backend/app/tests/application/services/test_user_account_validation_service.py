@@ -25,10 +25,12 @@ def test_service_raises_when_email_exists():
     fake_repository = Mock()
 
     fake_repository.get_user_account_by_email.return_value = UserAccount(
+        1,
         "link",
         "link@email.com",
         "hashed_password",
         "1234",
+        10,
     )
 
     service = UserAccountValidationService(fake_repository)
