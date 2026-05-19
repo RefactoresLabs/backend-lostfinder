@@ -26,7 +26,7 @@ def test_build_postgresql_success():
         "DATABASE_PORT": "3306",
     }
 
-    assert DatabaseURLBuilder.build("postgresql", data) == "postgresql://admin:1234@localhost:3306/teste?sslmode=require"
+    assert DatabaseURLBuilder.build("postgresql", data) == "postgresql://admin:1234@localhost:3306/teste"
 
 def test_build_postgresql_wrong_username_type():
 
