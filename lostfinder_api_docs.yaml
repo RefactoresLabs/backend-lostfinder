@@ -59,19 +59,10 @@ paths:
               example:
                 message: Email já cadastrado
                 code: EMAIL_ALREADY_EXISTS_ERROR
-  /users/{user_id}:
-    description: Esse caminho representa um recurso de conta de usuário
     get:
       tags:
       - Usuários
       description: Obtém os dados de uma conta de usuário
-      parameters:
-      - name: user_id
-        in: path
-        description: ID da conta de usuário
-        required: true
-        schema:
-          type: integer
       responses:
         "200":
           description: Conta de usuário obtida com sucesso
@@ -116,13 +107,6 @@ paths:
       tags:
       - Usuários
       description: Atualiza os dados de uma conta de usuário
-      parameters:
-      - name: user_id
-        in: path
-        description: ID da conta de usuário
-        required: true
-        schema:
-          type: integer
       requestBody:
         content:
           application/json:
