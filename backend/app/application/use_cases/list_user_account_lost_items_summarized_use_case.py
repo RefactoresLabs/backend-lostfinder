@@ -1,6 +1,6 @@
 from backend.app.application.interfaces.lost_item_query_service_interface import LostItemQueryServiceInterface
 from backend.app.application.dtos.list_user_account_items_summarized_input_dto import ListUserAccountItemsSummarizedInputDTO
-from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
+from backend.app.application.dtos.list_items_summarized_output_dto import ListItemsSummarizedOutputDTO
 
 from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
 from backend.app.domain.repositories.user_account_repository_interface import UserAccountRepositoryInterface
@@ -27,7 +27,7 @@ class ListUserAccountLostItemsSummarizedUseCase:
         self.__query_service = lost_item_query_service
         self.__user_account_repository = user_account_repository
     
-    def execute(self, dto: ListUserAccountItemsSummarizedInputDTO) -> list[ListItemsSummarizedDTO]:
+    def execute(self, dto: ListUserAccountItemsSummarizedInputDTO) -> list[ListItemsSummarizedOutputDTO]:
 
         """Executa o fluxo de eventos do caso de uso
 
@@ -38,7 +38,7 @@ class ListUserAccountLostItemsSummarizedUseCase:
         
         Returns
         -------
-        list[ListItemsSummarizedDTO]
+        list[ListItemsSummarizedOutputDTO]
             Iterável de objetos de transferência de dados contento os dados dos itens perdidos associados a conta de usuário
         
         Raises
@@ -57,7 +57,7 @@ class ListUserAccountLostItemsSummarizedUseCase:
         lost_items = self.__query_service.get_lost_items_summarized_by_user_id(dto.user_id)
 
         return [
-            ListItemsSummarizedDTO(
+            ListItemsSummarizedOutputDTO(
                 lost_item["item_id"],
                 lost_item["item_name"],
                 lost_item["user_name"],

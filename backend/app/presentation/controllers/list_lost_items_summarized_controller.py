@@ -1,5 +1,5 @@
 from backend.app.application.use_cases.list_lost_items_summarized_use_case import ListLostItemsSummarizedUseCase
-
+from backend.app.application.dtos.list_items_summarized_input_dto import ListItemsSummarizedInputDTO
 
 from backend.app.presentation.schemas.http_response import HttpResponse
 from backend.app.presentation.schemas.http_request import HttpRequest
@@ -41,7 +41,19 @@ class ListLostItemsSummarizedController:
 
         limit = http_request.params.get("limit", 0)
 
-        dtos = self.__use_case.execute()
+        name = http_request.params.get("name")
+        category_id = http_request.params.get("category_id")
+        sort_by = http_request.params["sort_by"] if http_request.params["sort_by"] is not None else "name"
+        sort_option = http_request.params["sort_option"] if http_request.params["sort_option"] is not None else "asc"
+
+        dto = ListItemsSummarizedInputDTO(
+            name,
+            category_id,
+            sort_by,
+            sort_option
+        )
+
+        dtos = self.__use_case.execute(dto)
 
         if limit < 0:
 

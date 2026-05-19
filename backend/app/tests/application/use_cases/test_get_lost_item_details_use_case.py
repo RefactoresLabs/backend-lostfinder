@@ -31,6 +31,7 @@ def test_get_lost_item_success():
             email="link@email.com",
             password="1234",
             phone="1234",
+            score=20
         ),
         category=Category(
             id=1,

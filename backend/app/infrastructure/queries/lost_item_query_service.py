@@ -10,7 +10,12 @@ from backend.app.infrastructure.persistence.models.image_model import ImageModel
 from backend.app.infrastructure.persistence.models.user_account_model import UserAccountModel
 
 from backend.app.application.interfaces.lost_item_query_service_interface import LostItemQueryServiceInterface
-
+from backend.app.application.queries.filters.list_items_summary_filters import ListItemsSummaryFilters
+from backend.app.application.queries.sorts.list_items_summary_sort import ListItemsSummarySort
+from backend.app.application.queries.sorts.enums.list_items_summary_sort_field import ListItemsSummarySortField
+from backend.app.application.queries.sorts.enums.list_items_summary_sort_option import ListItemsSummarySortOption
+from backend.app.application.queries.exceptions.invalid_sort_field_error import InvalidSortFieldError
+from backend.app.application.queries.exceptions.sort_option_doesnt_exist_error import SortOptionDoesntExistError
 
 from typing import Any
 
@@ -32,9 +37,17 @@ class LostItemQueryService(LostItemQueryServiceInterface):
 
         self.__session = session
 
-    def get_all_lost_items_summarized(self) -> list[dict[str, Any]]:
+    def get_all_lost_items_summarized(self, filters: ListItemsSummaryFilters, sort: ListItemsSummarySort) -> list[dict[str, Any]]:
 
         """Obtém os dados resumidos das instâncias associadas a lost_item
+
+        Parameters
+        ----------
+        filters: ListItemsSummaryFilters
+            Filtros a serem aplicados na consulta
+        
+        sort: ListItemsSummarySort
+            Ordenamento a ser aplicado na consulta
 
         Returns
         -------
@@ -53,7 +66,7 @@ class LostItemQueryService(LostItemQueryServiceInterface):
             ).subquery()
             )
 
-        results = self.__session.query(
+        query = self.__session.query(
             ItemModel.id,
             ItemModel.name,
             UserAccountModel.name,
@@ -78,7 +91,48 @@ class LostItemQueryService(LostItemQueryServiceInterface):
         ).outerjoin(
             ImageModel,
             ImageModel.id == subquery.c.min_image_id,
-        ).all()
+        )
+
+        if filters.name is not None:
+
+            query = query.filter(
+                ItemModel.name.ilike(f"%{filters.name}%")
+            )
+        
+        if filters.category_id is not None:
+
+            query = query.filter(
+                CategoryModel.id == filters.category_id
+            )
+        
+        sortable_fields = {
+            ListItemsSummarySortField.NAME: ItemModel.name
+        }
+
+        sort_column = sortable_fields.get(sort.sort_field)
+
+        if sort_column:
+
+            match sort.sort_option:
+
+                case ListItemsSummarySortOption.ASC:
+
+                    query = query.order_by(sort_column.asc())
+                
+                case ListItemsSummarySortOption.DESC:
+
+                    query = query.order_by(sort_column.desc())
+                
+                case _:
+
+                    raise SortOptionDoesntExistError("Essa opção de ordenamento não existe")
+
+        else:
+
+            raise InvalidSortFieldError("Não há como ordenar por esse campo")
+        
+
+        results = query.all()
         
         return [
             {

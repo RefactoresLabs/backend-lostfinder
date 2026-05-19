@@ -42,7 +42,7 @@ class LoginController:
 
         body = http_request.body
 
-        required_fields = ["email", "password"]
+        required_fields = ("email", "password")
 
         if not all([field in body.keys() for field in required_fields]):
             return HttpResponse(

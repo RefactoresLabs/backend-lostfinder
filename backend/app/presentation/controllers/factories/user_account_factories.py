@@ -1,5 +1,6 @@
 from backend.app.application.services.user_account_validation_service import UserAccountValidationService
 from backend.app.application.use_cases.register_user_account_use_case import RegisterUserAccountUseCase
+from backend.app.application.use_cases.get_user_account_details_use_case import GetUserAccountDetailsUseCase
 
 from backend.app.infrastructure.persistence.repositories.user_account_repository import UserAccountRepository
 from backend.app.infrastructure.security.bcrypt_hasher import BcryptHasher
@@ -7,6 +8,8 @@ from backend.app.infrastructure.database.session_manager import SessionManager
 from backend.app.infrastructure.database.database_url_builder import DatabaseURLBuilder
 
 from backend.app.presentation.controllers.register_user_account_controller import RegisterUserAccountController
+from backend.app.presentation.controllers.get_user_account_details_controller import GetUserAccountDetailsController
+
 
 from sqlalchemy.orm import Session
 
@@ -35,4 +38,26 @@ def make_register_user_account_controller(session: Session) -> RegisterUserAccou
     )
 
     return RegisterUserAccountController(register_user_account_use_case)
+
+def make_get_user_account_details_controller(session: Session) -> GetUserAccountDetailsController:
+
+    """Function factory que cria um objeto GetUserAccountDetailsController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+    
+    Returns
+    -------
+    GetUserAccountDetailsController
+        Ponto de acesso do endpoint com o caso de uso de obter detalhes de uma conta de usuário
+
+    """
+
+    repository = UserAccountRepository(session)
+
+    use_case = GetUserAccountDetailsUseCase(repository)
+
+    return GetUserAccountDetailsController(use_case)
 

@@ -2,11 +2,15 @@ from backend.app.application.use_cases.list_lost_items_summarized_use_case impor
 from backend.app.application.use_cases.create_lost_item_use_case import CreateLostItemUseCase
 from backend.app.application.use_cases.get_lost_item_details_use_case import GetLostItemDetailsUseCase
 from backend.app.application.use_cases.list_user_account_lost_items_summarized_use_case import ListUserAccountLostItemsSummarizedUseCase
+from backend.app.application.use_cases.update_lost_item_use_case import UpdateLostItemUseCase
+from backend.app.application.use_cases.delete_lost_item_use_case import DeleteLostItemUseCase
 
 from backend.app.presentation.controllers.list_lost_items_summarized_controller import ListLostItemsSummarizedController
 from backend.app.presentation.controllers.create_lost_item_controller import CreateLostItemController
 from backend.app.presentation.controllers.get_lost_item_details_controller import GetLostItemDetailsController
 from backend.app.presentation.controllers.list_user_account_lost_items_summarized_controller import ListUserAccountLostItemsSummarizedController
+from backend.app.presentation.controllers.update_lost_item_controller import UpdateLostItemController
+from backend.app.presentation.controllers.delete_lost_item_controller import DeleteLostItemController
 
 from backend.app.infrastructure.persistence.repositories.lost_item_repository import LostItemRepository
 from backend.app.infrastructure.persistence.repositories.category_repository import CategoryRepository
@@ -101,12 +105,12 @@ def make_list_user_account_lost_item_summarized_controller(session: Session) -> 
     ----------
     session: Session
         Sessão usada para as transações com o banco
-    
+
     Returns
     -------
     ListUserAccountLostItemsSummarizedController
         Ponto de acesso do endpoint com o caso de uso de listar itens perdidos resumidamente de uma conta de usuário
-        
+
     """
 
     query_service = LostItemQueryService(session)
@@ -116,3 +120,53 @@ def make_list_user_account_lost_item_summarized_controller(session: Session) -> 
     use_case = ListUserAccountLostItemsSummarizedUseCase(query_service, repository)
 
     return ListUserAccountLostItemsSummarizedController(use_case)
+
+def make_update_lost_item_controller(session: Session) -> UpdateLostItemController:
+
+    """Factory function que cria um objeto UpdateLostItemController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+
+    Returns
+    -------
+    UpdateLostItemController
+        Ponto de acesso do endpoint com o caso de uso de atualização de item perdido
+
+    """
+
+    lost_item_repository = LostItemRepository(session)
+    category_repository = CategoryRepository(session)
+    building_space_repository = BuildingSpaceRepository(session)
+
+    use_case = UpdateLostItemUseCase(
+        lost_item_repository=lost_item_repository,
+        category_repository=category_repository,
+        building_space_repository=building_space_repository,
+    )
+
+    return UpdateLostItemController(use_case)
+
+def make_delete_lost_item_controller(session: Session) -> DeleteLostItemController:
+
+    """Factory function que cria um objeto DeleteLostItemController
+
+    Parameters
+    ----------
+    session: Session
+        Sessão usada para as transações com o banco
+
+    Returns
+    -------
+    DeleteLostItemController
+        Ponto de acesso do endpoint com o caso de uso de exclusão de item perdido
+
+    """
+
+    repository = LostItemRepository(session)
+
+    use_case = DeleteLostItemUseCase(repository)
+
+    return DeleteLostItemController(use_case)

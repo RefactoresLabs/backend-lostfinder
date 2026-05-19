@@ -21,7 +21,7 @@ def test_create_found_item_use_case_success():
     building = Building(id=1, name="Prédio B", associated_localization=localization)
     space_found = BuildingSpace(id=1, name="Pátio", associated_building=building)
     space_left = BuildingSpace(id=2, name="Recepção", associated_building=building)
-    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123")
+    user = UserAccount(id=1, name="User", email="test@test.com", password="pwd", phone="123", score=20)
 
     fake_cat_repo.get_category_by_id.return_value = category
     fake_space_repo.get_building_space_by_id.side_effect = [space_found, space_left]

@@ -82,7 +82,8 @@ def seed_data(session: Session) -> None:
         name="teste",
         email="teste@email.com",
         password="1234",
-        phone="1111"
+        phone="1111",
+        score=20,
     )
 
     item = ItemModel(
@@ -122,10 +123,10 @@ def test_create_lost_item_success(session, seed_data):
 
     repo = LostItemRepository(session)
 
-    images = [
+    images = (
         Image(url="./image1.png"),
         Image(url="./image3.png")
-    ]
+    )
 
     category = Category(
         id=1,
@@ -155,7 +156,8 @@ def test_create_lost_item_success(session, seed_data):
         name="teste",
         email="teste@email.com",
         password="1234",
-        phone="1111"
+        phone="1111",
+        score=20,
     )
 
     lost_item = LostItem(
@@ -206,7 +208,8 @@ def test_update_lost_item_success(session, seed_data):
         name="teste",
         email="teste@email.com",
         password="1234",
-        phone="1111"
+        phone="1111",
+        score=20,
     )
 
     to_update_lost_item = LostItem(

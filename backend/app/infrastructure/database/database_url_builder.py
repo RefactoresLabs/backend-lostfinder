@@ -32,13 +32,13 @@ class DatabaseURLBuilder:
             
             return f"{driver}:///{database}"
         
-        required_fields = [
+        required_fields = (
             "USERNAME", 
             "PASSWORD", 
             "HOSTNAME", 
             "DATABASE_PORT", 
             "DATABASE"
-        ]
+        )
 
         for field in required_fields:
 
@@ -53,4 +53,4 @@ class DatabaseURLBuilder:
         port = data["DATABASE_PORT"]
         database = data["DATABASE"]
 
-        return f"{driver}://{user}:{password}@{host}:{port}/{database}?sslmode=require"
+        return f"{driver}://{user}:{password}@{host}:{port}/{database}"

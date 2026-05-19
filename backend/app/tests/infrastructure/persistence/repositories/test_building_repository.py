@@ -95,7 +95,7 @@ def test_get_building_by_id_success(session, seed_data):
 
     repo = BuildingRepository(session)
 
-    building = repo.get_buildind_by_id(2)
+    building = repo.get_building_by_id(2)
 
     assert building.name == "predio 2"
     assert building.localization.cep == "22222222"
@@ -104,6 +104,6 @@ def test_get_building_by_id_when_id_not_exists(session, seed_data):
 
     repo = BuildingRepository(session)
 
-    building = repo.get_buildind_by_id(3)
+    building = repo.get_building_by_id(3)
 
     assert building is None

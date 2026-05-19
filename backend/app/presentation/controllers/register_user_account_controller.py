@@ -42,7 +42,7 @@ class RegisterUserAccountController:
 
         body = http_request.body
 
-        required_fields = ["name", "email", "password", "confirm_password", "phone"]
+        required_fields = ("name", "email", "password", "confirm_password", "phone")
 
         if not all([field in body.keys() for field in required_fields]):
 

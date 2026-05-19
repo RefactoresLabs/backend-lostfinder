@@ -1,7 +1,7 @@
 from backend.app.presentation.controllers.list_user_account_found_items_summarized_controller import ListUserAccountFoundItemsSummarizedController
 from backend.app.presentation.schemas.http_request import HttpRequest
 
-from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
+from backend.app.application.dtos.list_items_summarized_output_dto import ListItemsSummarizedOutputDTO
 
 from backend.app.domain.exceptions.user_account_doesnt_exist_error import UserAccountDoesntExistError
 
@@ -14,7 +14,7 @@ def test_list_user_account_found_items_summarized_controller_success():
     use_case = Mock()
 
     use_case.execute.return_value = [
-        ListItemsSummarizedDTO(
+        ListItemsSummarizedOutputDTO(
             item_id=1,
             item_name="Lápis",
             user_name="Link",
@@ -22,7 +22,7 @@ def test_list_user_account_found_items_summarized_controller_success():
             building_space_name="sala 1",
             image_url="./storage/image1.png"
         ),
-        ListItemsSummarizedDTO(
+        ListItemsSummarizedOutputDTO(
             item_id=2,
             item_name="Caneta",
             user_name="Mario",

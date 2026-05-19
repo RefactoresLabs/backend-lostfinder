@@ -23,7 +23,7 @@ def test_build_postgresql_success():
         "USERNAME": "admin",
         "PASSWORD": "1234",
         "HOSTNAME": "localhost",
-        "PORT": "3306",
+        "DATABASE_PORT": "3306",
     }
 
     assert DatabaseURLBuilder.build("postgresql", data) == "postgresql://admin:1234@localhost:3306/teste"
@@ -34,7 +34,7 @@ def test_build_postgresql_wrong_username_type():
         "DATABASE": "teste",
         "PASSWORD": "1234",
         "HOSTNAME": "localhost",
-        "PORT": "3306",
+        "DATABASE_PORT": "3306",
         "USERNAME": 4
     }
 
@@ -48,7 +48,7 @@ def test_build_postgresql_username_key_missing():
         "DATABASE": "teste",
         "PASSWORD": "1234",
         "HOSTNAME": "localhost",
-        "PORT": "3306",
+        "DATABASE_PORT": "3306",
     }
 
     with pytest.raises(KeyError):

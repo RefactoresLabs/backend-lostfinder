@@ -71,7 +71,24 @@ class UserAccountRepository(UserAccountRepositoryInterface):
             Objeto da entidade conta de usuário com os dados atualizados
         
         """
-        pass
+
+        updated_data = {
+            "name": user_account.name,
+            "password": user_account.password,
+            "phone": user_account.phone,
+            "score": user_account.score,
+        }
+        
+        self.__session.query(
+            UserAccountModel
+        ).filter(
+            UserAccountModel.id == id
+        ).update(
+            updated_data,
+            synchronize_session=False
+        )
+
+        return user_account
 
     def get_user_account_by_id(self, id: int) -> UserAccount | None:
 
@@ -104,6 +121,7 @@ class UserAccountRepository(UserAccountRepositoryInterface):
             email=user_account_model.email,
             password=user_account_model.password,
             phone=user_account_model.phone,
+            score=user_account_model.score,
         )
 
 
@@ -138,4 +156,5 @@ class UserAccountRepository(UserAccountRepositoryInterface):
             email=user_account_model.email,
             password=user_account_model.password,
             phone=user_account_model.phone,
+            score=user_account_model.score,
         )

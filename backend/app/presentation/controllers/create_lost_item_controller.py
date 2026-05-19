@@ -44,7 +44,7 @@ class CreateLostItemController:
 
         body = http_request.body
 
-        required_fields = ["name", "description", "category_id", "lost_building_space_id"]
+        required_fields = ("name", "description", "category_id", "lost_building_space_id")
 
         if not all([field in body.keys() for field in required_fields]):
 
