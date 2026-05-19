@@ -86,7 +86,8 @@ def seed_data(session: Session):
         name="teste",
         email="teste@email.com",
         password="1234",
-        phone="1111"
+        phone="1111",
+        score=10,
     )
 
     item1 = ItemModel(
@@ -163,7 +164,7 @@ def test_get_all_lost_item_summarized_success(session: Session, seed_data):
     assert len(lost_items_summarized) == 3
     assert lost_items_summarized[0]["item_name"] == "Lápis"
     assert lost_items_summarized[1]["building_space_name"] == "sala 2"
-    assert lost_items_summarized[2]["image_url"] is None
+    assert lost_items_summarized[2]["image_url"] == ""
 
 def test_get_lost_items_summarized_by_user_id_success(session: Session, seed_data):
 
