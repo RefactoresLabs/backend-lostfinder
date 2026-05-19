@@ -13,6 +13,8 @@ from backend.app.presentation.controllers.factories.claim_factories import (
     make_accept_claim_controller,
     make_finish_claim_controller,
     make_reject_claim_controller,
+    make_list_my_created_claims_controller,
+    make_list_my_received_claims_controller,
 )
 from backend.app.presentation.middlewares.jwt_required import jwt_required
 
@@ -211,5 +213,61 @@ def create_claim_routes(app: Flask) -> None:
             )
 
             http_response = reject_claim_controller.handle(http_request)
+
+        return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/claims/my-created-claims", methods=["GET"])
+    @jwt_required
+    def list_my_created_claims():
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "user_id": request.user_payload["user_id"]
+                },
+            )
+
+            controller = make_list_my_created_claims_controller(session_manager.session)
+            http_response = controller.handle(http_request)
+
+        return jsonify(http_response.body), http_response.status_code
+
+    @app.route("/claims/my-received-claims", methods=["GET"])
+    @jwt_required
+    def list_my_received_claims():
+
+        database_url = DatabaseURLBuilder.build(
+            os.environ["SGBD"],
+            {
+                "DATABASE": os.environ.get("DATABASE"),
+                "USERNAME": os.environ.get("USERNAME"),
+                "PASSWORD": os.environ.get("PASSWORD"),
+                "HOSTNAME": os.environ.get("HOSTNAME"),
+                "DATABASE_PORT": os.environ.get("DATABASE_PORT"),
+            },
+        )
+
+        with SessionManager(database_url) as session_manager:
+
+            http_request = HttpRequest(
+                params={
+                    "user_id": request.user_payload["user_id"]
+                },
+            )
+
+            controller = make_list_my_received_claims_controller(session_manager.session)
+            http_response = controller.handle(http_request)
 
         return jsonify(http_response.body), http_response.status_code
