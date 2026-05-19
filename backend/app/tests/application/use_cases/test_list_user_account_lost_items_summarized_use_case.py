@@ -4,9 +4,22 @@ from backend.app.application.dtos.list_items_summarized_dto import ListItemsSumm
 from backend.app.application.dtos.list_user_account_items_summarized_input_dto import ListUserAccountItemsSummarizedInputDTO
 from backend.app.application.use_cases.list_user_account_lost_items_summarized_use_case import ListUserAccountLostItemsSummarizedUseCase
 
+from backend.app.domain.entities.user_account import UserAccount
+
+
 def test_list_lost_items_use_case_success():
 
     query_service = Mock()
+    user_repository = Mock()
+
+    user_repository.get_user_account_by_id.return_value = UserAccount(
+        1,
+        "link",
+        "link@email.com",
+        "1234",
+        "12345678",
+        10,
+    )
 
     query_service.get_lost_items_summarized_by_user_id.return_value = [
         {
@@ -27,7 +40,7 @@ def test_list_lost_items_use_case_success():
         },
     ]
 
-    use_case = ListUserAccountLostItemsSummarizedUseCase(query_service)
+    use_case = ListUserAccountLostItemsSummarizedUseCase(query_service, user_repository)
 
     input_dto = ListUserAccountItemsSummarizedInputDTO(
         user_id=1
