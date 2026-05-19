@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 
-from backend.app.application.dtos.list_items_summarized_dto import ListItemsSummarizedDTO
 from backend.app.application.dtos.list_user_account_items_summarized_input_dto import ListUserAccountItemsSummarizedInputDTO
 from backend.app.application.use_cases.list_user_account_found_items_summarized_use_case import ListUserAccountFoundItemsSummarizedUseCase
 
@@ -46,7 +45,7 @@ def test_list_found_items_use_case_success():
         user_id=1
     )
 
-    dtos: list[ListItemsSummarizedDTO] = use_case.execute(input_dto)
+    dtos = use_case.execute(input_dto)
 
     assert dtos[0].item_name == "Lápis"
     assert dtos[1].image_url is None
