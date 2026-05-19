@@ -80,13 +80,23 @@ def create_found_item_routes(app: Flask) -> None:
         with SessionManager(database_url) as session_manager:
 
             limit = int(request.args.get("limit", 0))
+            category_id = request.args.get("category_id")
+            
+            if isinstance(category_id, str) and category_id.isnumeric() and category_id is not None:
+
+                category_id = int(category_id)
+            
+            else:
+
+                category_id = None
+
             body = request.get_json() if request.data else {}
 
             http_request = HttpRequest(
                 params={
                     "limit": limit,
                     "name": request.args.get("name"),
-                    "category_id": int(request.args.get("category_id")),
+                    "category_id": category_id,
                     "sort_by": request.args.get("sort_by"),
                     "sort_option": request.args.get("sort_option")
                 },
