@@ -86,7 +86,13 @@ def create_lost_item_routes(app: Flask) -> None:
             body = request.get_json() if request.data else {}
 
             http_request = HttpRequest(
-                params={"limit": limit},
+                params={
+                    "limit": limit,
+                    "name": request.args.get("name"),
+                    "category_id": int(request.args.get("category_id")),
+                    "sort_by": request.args.get("sort_by"),
+                    "sort_option": request.args.get("sort_option")
+                },
                 body=body
             )
 
